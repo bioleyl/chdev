@@ -233,4 +233,4 @@ Une fois l'application lancée et connectée, voici votre parcours recommandé :
 
 ---
 
-> 💡 **Pour aller plus loin** : Cette documentation est elle-même une workspace du projet. Si vous voulez la modifier et la relire en local, exécutez `npm run doc:dev` pour lancer le serveur de documentation sur `http://localhost:5173`.
+> 💡 **Pour aller plus loin** : Cette documentation est elle-même une workspace du projet. Si vous voulez la modifier et la relire en local, exécutez `npm run doc:dev` pour lancer le serveur de documentation sur `http://localhost:2500`.

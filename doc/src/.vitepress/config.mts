@@ -1,10 +1,11 @@
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
+  base: '/chdev/',
+  ignoreDeadLinks: true,
   title: 'CHDev — Documentation',
   description: 'Documentation et guide de formation pour le projet CHDev',
   lastUpdated: true,
-  ignoreDeadLinks: [{ hostname: undefined, pattern: /^\.\.\/\.\.\/\.editorconfig/ }],
   vite: {
     server: {
       port: 2500,
