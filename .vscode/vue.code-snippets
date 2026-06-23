@@ -1,0 +1,15 @@
+{
+  "Vue 3 Script Setup TS": {
+    "prefix": "vts",
+    "body": [
+      "<script setup lang=\"ts\">",
+      "",
+      "</script>",
+      "",
+      "<template>",
+      "  ${1}",
+      "</template>"
+    ],
+    "description": "Vue 3 script setup TypeScript with template focus"
+  }
+}

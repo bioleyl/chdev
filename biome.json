@@ -1,0 +1,157 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "sortBareImports": true,
+            "groups": [
+              {
+                "source": [":URL:", ":NODE:", ":PACKAGE:", ":ALIAS:", ":PATH:"],
+                "type": false
+              },
+              {
+                "source": [":URL:", ":NODE:", ":PACKAGE:", ":ALIAS:", ":PATH:"],
+                "type": true
+              }
+            ]
+          }
+        },
+        "useSortedKeys": "off",
+        "useSortedAttributes": {
+          "level": "on",
+          "options": {
+            "sortOrder": "lexicographic"
+          }
+        }
+      }
+    },
+    "enabled": true
+  },
+  "css": {
+    "formatter": {
+      "indentStyle": "space",
+      "indentWidth": 2
+    }
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**/*.{ts,js,css,json,vue}",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/build",
+      "!**/coverage",
+      "!**/cache"
+    ]
+  },
+  "formatter": {
+    "attributePosition": "multiline",
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 115,
+    "useEditorconfig": true
+  },
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "enabled": true,
+      "attributePosition": "multiline",
+      "indentScriptAndStyle": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "always",
+      "attributePosition": "multiline",
+      "bracketSameLine": true,
+      "bracketSpacing": true,
+      "expand": "auto",
+      "indentStyle": "space",
+      "operatorLinebreak": "before",
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "es5"
+    }
+  },
+  "json": {
+    "formatter": {
+      "bracketSpacing": true,
+      "expand": "auto",
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "trailingCommas": "none"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "a11y": {
+        "noAutofocus": "off",
+        "noStaticElementInteractions": "off"
+      },
+      "complexity": {
+        "noStaticOnlyClass": "off"
+      },
+      "correctness": {
+        "noUnusedImports": {
+          "fix": "safe",
+          "level": "error",
+          "options": {}
+        }
+      },
+      "preset": "recommended",
+      "style": {
+        "useVueDefineMacrosOrder": {
+          "level": "error"
+        },
+        "useBlockStatements": {
+          "fix": "safe",
+          "level": "error",
+          "options": {}
+        },
+        "useImportType": {
+          "level": "error",
+          "options": {
+            "style": "separatedType"
+          }
+        },
+        "useConsistentArrayType": {
+          "fix": "safe",
+          "level": "error",
+          "options": {
+            "syntax": "generic"
+          }
+        },
+        "useNamingConvention": {
+          "level": "error",
+          "options": {
+            "conventions": [
+              {
+                "formats": ["camelCase"],
+                "match": "_(.+)",
+                "selector": {
+                  "kind": "classProperty",
+                  "modifiers": ["private"]
+                }
+              },
+              {
+                "formats": ["camelCase", "CONSTANT_CASE"],
+                "match": ".*",
+                "selector": {
+                  "kind": "objectLiteralMember"
+                }
+              }
+            ],
+            "requireAscii": true,
+            "strictCase": false
+          }
+        }
+      }
+    }
+  }
+}

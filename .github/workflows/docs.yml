@@ -1,0 +1,52 @@
+name: Publier la documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "doc/**"
+      - ".github/workflows/docs.yml"
+
+# Annuler les workflows en cours si un nouveau push intervient
+concurrency:
+  group: "docs-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔍 Checkout
+        uses: actions/checkout@v4
+
+      - name: ☕ Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📦 Installer les dépendances
+        run: npm ci
+
+      - name: 🏗️ Construire la documentation
+        run: npm run doc:build
+
+      - name: 📁 Préparer le dépôt pour Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: doc/.vitepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 🚀 Déployer sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
