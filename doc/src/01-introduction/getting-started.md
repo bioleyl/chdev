@@ -118,7 +118,21 @@ Cela crée :
 
 ---
 
-## Étape 6 — Lancer l'application en mode développement
+## Étape 6 — Construire les artefacts partagés
+
+Le projet contient une workspace `common` qui regroupe le code partagé entre le backend et le frontend (schémas Zod, types TypeScript, constantes). Avant de lancer l'application, il faut la compiler pour que les autres workspaces puissent l'utiliser.
+
+```bash
+npm run build -w common
+```
+
+Cette commande transpile le TypeScript de `common` en JavaScript et place les fichiers compilés dans le dossier `dist/`. Les workspaces `backend` et `frontend` dépendent de ce résultat.
+
+> **Analogie WinDev** : `npm run build -w common` ≈ compiler une bibliothèque partagée que vos programmes vont importer. Le code source reste en TypeScript, mais c'est le JavaScript compilé qui est réellement utilisé par le backend et le frontend.
+
+---
+
+## Étape 7 — Lancer l'application en mode développement
 
 Le projet utilise un système de **workspaces** (espaces de travail npm). Les commandes raccourcies à la racine lancent les services en parallèle :
 
@@ -159,7 +173,7 @@ npm run doc:dev
 
 ---
 
-## Étape 7 — Se connecter
+## Étape 8 — Se connecter
 
 Trois utilisateurs ont été créés lors du seed, un par niveau d'accès :
 
@@ -212,6 +226,7 @@ Une fois l'application lancée et connectée, voici votre parcours recommandé :
 - [ ] Fichier `.env` configuré (copié depuis `.env.example`)
 - [ ] Migrations exécutées avec `npm --workspace backend run db:migrate`
 - [ ] Base de données remplie avec `npm --workspace backend run db:seed`
+- [ ] Artefacts partagés construits avec `npm run build -w common`
 - [ ] Application lancée avec `npm run dev`
 - [ ] Interface ouverte sur `http://localhost:5173`
 - [ ] Connexion réussie avec un compte de démonstration
