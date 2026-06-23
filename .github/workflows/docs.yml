@@ -1,52 +1,60 @@
-name: Publier la documentation
+name: Deploy VitePress site to Pages
 
 on:
   push:
     branches: [main]
-    paths:
-      - "doc/**"
-      - ".github/workflows/docs.yml"
-
-# Annuler les workflows en cours si un nouveau push intervient
-concurrency:
-  group: "docs-${{ github.ref }}"
-  cancel-in-progress: true
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 🔍 Checkout
+      - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: ☕ Installer Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+          cache: npm
 
-      - name: 📦 Installer les dépendances
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Install dependencies
+        working-directory: ./doc
         run: npm ci
 
-      - name: 🏗️ Construire la documentation
-        run: npm run doc:build
+      - name: Build with VitePress
+        working-directory: ./doc
+        run: npm run build
 
-      - name: 📁 Préparer le dépôt pour Pages
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: doc/.vitepress/dist
+          path: ./doc/.vitepress/dist
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: 🚀 Déployer sur GitHub Pages
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
