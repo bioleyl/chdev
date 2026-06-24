@@ -17,18 +17,25 @@
       itemsLength: number;
       isLoading: boolean;
       showActions?: boolean;
+      showExpand?: boolean;
       rowSelected?: T | null;
+      expanded?: Array<string | number>;
+      itemValue?: string;
       height?: number;
     }>(),
     {
       height: 900,
       showActions: false,
+      showExpand: false,
       rowSelected: null,
+      expanded: () => [],
+      itemValue: 'id',
     }
   );
 
   const emit = defineEmits<{
     'update:rowSelected': [item: T | null];
+    'update:expanded': [value: Array<string | number>];
     delete: [item: T];
     edit: [item: T];
     download: [item: T];
@@ -44,20 +51,37 @@
     },
   });
 
+  const typedExpanded = computed<ReadonlyArray<string>>({
+    get: () => props.expanded as ReadonlyArray<string>,
+    set: (value) => emit('update:expanded', [...value]),
+  });
+
   const columns = computed(() => {
-    return props.showActions
-      ? [
-          ...props.headers,
-          {
-            title: 'Actions',
-            key: 'actions',
-            sortable: false,
-            cellProps: { class: 'action-column' },
-            headerProps: { class: 'action-column' },
-            align: 'center' as const,
-          },
-        ]
-      : props.headers;
+    const result: Array<DataTableHeader<T>> = [];
+
+    if (props.showExpand) {
+      result.push({
+        title: '',
+        key: 'data-table-expand',
+        sortable: false,
+        width: 48,
+      } as DataTableHeader<T>);
+    }
+
+    result.push(...props.headers);
+
+    if (props.showActions) {
+      result.push({
+        title: 'Actions',
+        key: 'actions',
+        sortable: false,
+        cellProps: { class: 'action-column-cell' },
+        headerProps: { class: 'action-column-header' },
+        align: 'center' as const,
+      } as DataTableHeader<T>);
+    }
+
+    return result;
   });
 
   function onSortByChange(cols: Array<DataTableSortItem>) {
@@ -87,29 +111,49 @@
     }
   }
 
-  function onRowClick(item: T) {
+  function shouldIgnoreRowSelection(target: EventTarget | null): boolean {
+    if (!(target instanceof HTMLElement)) {
+      return false;
+    }
+
+    return Boolean(target.closest('.v-data-table__expand-icon, .v-btn, a, button, input, textarea, select'));
+  }
+
+  function onRowClick(item: T, event: MouseEvent) {
+    if (shouldIgnoreRowSelection(event.target)) {
+      return;
+    }
+
     emit('update:rowSelected', item);
   }
 
   function rowProps({ item }: { item: T }) {
     return {
       class: item === props.rowSelected ? 'selected-row' : '',
-      onClick: () => onRowClick(item),
+      onClick: (event: MouseEvent) => onRowClick(item, event),
     };
+  }
+
+  function onExpandedChange(value: ReadonlyArray<string>) {
+    emit('update:expanded', [...value]);
   }
 </script>
 
 <template>
   <v-data-table-server
     fixed-header
+    :expanded="typedExpanded"
     :headers="columns"
     :height="props.height"
+    :item-value="props.itemValue"
     :items="items"
     :items-length="itemsLength"
     :items-per-page="pagination.itemsPerPage"
     :loading="isLoading"
     :page="pagination.page"
     :row-props="rowProps"
+    :show-expand="props.showExpand"
+    @update:expanded="onExpandedChange"
     @update:items-per-page="onItemsPerPageChange"
     @update:page="onPageChange"
     @update:sort-by="onSortByChange"
@@ -173,11 +217,19 @@
     background-color: rgba(25, 118, 210, 0.18);
   }
 
-  :global(.action-column) {
+  :global(.action-column-header) {
     position: sticky;
     right: 0;
     background: rgb(var(--v-theme-surface));
     z-index: 2;
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  :global(.action-column-cell) {
+    position: sticky;
+    right: 0;
+    background: rgb(var(--v-theme-surface));
+    z-index: 1;
     border-left: 1px solid rgba(0, 0, 0, 0.12);
   }
 </style>

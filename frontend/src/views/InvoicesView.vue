@@ -31,19 +31,20 @@
           :is-loading="isLoading"
           :items="invoices"
           :items-length="itemsLength"
-          @delete="deleteInvoice"
+          :show-actions="true"
+          @delete="handleDeleteInvoice"
           @edit="startEdit"
-          @print="printInvoice"
+          @print="printInvoiceCommand"
         />
       </v-col>
     </v-row>
     <InvoiceModal
-      v-model="modalOpen"
+      v-model="invoiceModalOpen"
       :invoice="selectedInvoice"
-      :is-creating="isCreating"
-      :schema="schema"
-      @cancel="handleCancel"
-      @saved="handleModalSaved"
+      :is-creating="isCreatingInvoice"
+      :schema="invoiceSchema"
+      @cancel="handleInvoiceModalCancel"
+      @saved="handleInvoiceModalSaved"
     />
   </v-container>
 </template>
@@ -63,11 +64,11 @@
   const { isLoading, withLoading } = useLoading();
   const invoices = ref<Array<Invoice>>([]);
   const rowSelected = ref<Invoice | null>(null);
-  const selectedInvoice = ref<Invoice | null>(null);
   const search = ref<string>('');
   const itemsLength = ref<number>(0);
-  const modalOpen = ref<boolean>(false);
-  const isCreating = ref<boolean>(false);
+  const invoiceModalOpen = ref<boolean>(false);
+  const selectedInvoice = ref<Invoice | null>(null);
+  const isCreatingInvoice = ref<boolean>(false);
 
   const options = ref<PaginationInput>({
     search: '',
@@ -78,7 +79,9 @@
     sortDesc: false,
   });
 
-  const schema = computed(() => (isCreating.value ? createInvoiceSchema : updateInvoiceSchema));
+  const invoiceSchema = computed(() => {
+    return isCreatingInvoice.value ? createInvoiceSchema : updateInvoiceSchema;
+  });
 
   watch(options, (newOptions) => {
     fetchInvoices(newOptions);
@@ -94,46 +97,55 @@
     itemsLength.value = total;
   }
 
-  async function deleteInvoice(invoice: Invoice) {
-    await withLoading(InvoiceService.delete(invoice.id));
+  async function refreshAfterInvoiceChange(): Promise<void> {
     await fetchInvoices(options.value);
   }
 
-  function startCreate() {
-    isCreating.value = true;
+  function startCreate(): void {
+    isCreatingInvoice.value = true;
     selectedInvoice.value = null;
-    modalOpen.value = true;
+    invoiceModalOpen.value = true;
   }
 
-  function startEdit(item: Invoice) {
-    isCreating.value = false;
-    selectedInvoice.value = item;
-    modalOpen.value = true;
+  function startEdit(invoice: Invoice): void {
+    isCreatingInvoice.value = false;
+    selectedInvoice.value = invoice;
+    invoiceModalOpen.value = true;
   }
 
-  function handleCancel() {
+  function handleInvoiceModalCancel(): void {
+    invoiceModalOpen.value = false;
+    isCreatingInvoice.value = false;
     selectedInvoice.value = null;
-    isCreating.value = false;
-    modalOpen.value = false;
   }
 
-  async function handleModalSaved(value: CreateInvoiceInput | UpdateInvoiceInput) {
+  async function saveInvoiceCommand(value: CreateInvoiceInput | UpdateInvoiceInput): Promise<void> {
     if ('id' in value) {
       await withLoading(InvoiceService.update(value.id, value));
     } else {
       await withLoading(InvoiceService.create(value));
     }
-    handleCancel();
-    fetchInvoices(options.value);
+    await refreshAfterInvoiceChange();
   }
 
-  async function printInvoice(item: Invoice): Promise<void> {
-    const blob = await withLoading(InvoiceService.downloadPdf(item.id));
+  async function handleInvoiceModalSaved(value: CreateInvoiceInput | UpdateInvoiceInput): Promise<void> {
+    await saveInvoiceCommand(value);
+    handleInvoiceModalCancel();
+  }
+
+  async function deleteInvoiceCommand(invoice: Invoice): Promise<void> {
+    await withLoading(InvoiceService.delete(invoice.id));
+    await refreshAfterInvoiceChange();
+  }
+
+  async function handleDeleteInvoice(invoice: Invoice): Promise<void> {
+    await deleteInvoiceCommand(invoice);
+  }
+
+  async function printInvoiceCommand(invoice: Invoice): Promise<void> {
+    const blob = await withLoading(InvoiceService.downloadPdf(invoice.id));
     const url = URL.createObjectURL(blob);
-
     window.open(url, '_blank');
-
-    // optional cleanup (slightly delayed to ensure the tab has time to load it)
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 

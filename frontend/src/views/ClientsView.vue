@@ -28,12 +28,15 @@
         <ClientList
           v-model:options="options"
           v-model:row-selected="rowSelected"
+          :invoice-refresh-token="invoiceRefreshToken"
           :is-loading="isLoading"
           :items="clients"
           :items-length="totalClients"
-          :search="search"
           @delete="deleteClient"
+          @delete-invoice="handleDeleteInvoice"
           @edit="startEdit"
+          @edit-invoice="handleEditInvoice"
+          @print-invoice="printInvoiceCommand"
         />
       </v-col>
     </v-row>
@@ -53,13 +56,13 @@
     />
 
     <InvoiceModal
-      v-model="invoiceFromClientModalOpen"
-      :invoice="null"
-      :is-creating="isCreatingFromClient"
+      v-model="invoiceModalOpen"
+      :invoice="selectedInvoiceForInvoiceModal"
+      :is-creating="isCreatingInvoice"
       :preselected-client-id="preselectedClientId"
       :schema="invoiceSchema"
-      @cancel="handleInvoiceFromClientCancel"
-      @saved="handleInvoiceFromClientSaved"
+      @cancel="handleInvoiceModalCancel"
+      @saved="handleInvoiceModalSaved"
     />
   </v-container>
 </template>
@@ -68,7 +71,7 @@
   lang="ts"
   setup
 >
-  import { createClientSchema, createInvoiceSchema, updateClientSchema } from '@chdev/common';
+  import { createClientSchema, createInvoiceSchema, updateClientSchema, updateInvoiceSchema } from '@chdev/common';
   import { computed, onMounted, ref, watch } from 'vue';
   import ClientDrawer from '@/components/clients/ClientDrawer.vue';
   import ClientList from '@/components/clients/ClientList.vue';
@@ -81,8 +84,10 @@
     Client,
     CreateClientInput,
     CreateInvoiceInput,
+    Invoice,
     PaginationInput,
     UpdateClientInput,
+    UpdateInvoiceInput,
   } from '@chdev/common';
 
   const { isLoading, withLoading } = useLoading();
@@ -94,8 +99,10 @@
   const modalOpen = ref<boolean>(false);
   const isCreating = ref<boolean>(false);
   const drawerOpen = ref<boolean>(false);
-  const isCreatingFromClient = ref<boolean>(false);
-  const invoiceFromClientModalOpen = ref<boolean>(false);
+  const invoiceRefreshToken = ref<number>(0);
+  const invoiceModalOpen = ref<boolean>(false);
+  const isCreatingInvoice = ref<boolean>(false);
+  const selectedInvoiceForInvoiceModal = ref<Invoice | null>(null);
   const preselectedClientId = ref<number | undefined>(undefined);
 
   const options = ref<PaginationInput>({
@@ -132,8 +139,34 @@
   });
 
   const invoiceSchema = computed(() => {
-    return createInvoiceSchema;
+    return isCreatingInvoice.value ? createInvoiceSchema : updateInvoiceSchema;
   });
+
+  async function refreshAfterInvoiceChange() {
+    invoiceRefreshToken.value += 1;
+    await fetchClients(options.value);
+  }
+
+  async function saveInvoiceCommand(value: CreateInvoiceInput | UpdateInvoiceInput): Promise<void> {
+    if ('id' in value) {
+      await withLoading(InvoiceService.update(value.id, value));
+    } else {
+      await withLoading(InvoiceService.create(value));
+    }
+    await refreshAfterInvoiceChange();
+  }
+
+  async function deleteInvoiceCommand(invoice: Invoice): Promise<void> {
+    await withLoading(InvoiceService.delete(invoice.id));
+    await refreshAfterInvoiceChange();
+  }
+
+  async function printInvoiceCommand(invoice: Invoice): Promise<void> {
+    const blob = await withLoading(InvoiceService.downloadPdf(invoice.id));
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
 
   async function fetchClients(pagination: PaginationInput) {
     const { data, total } = await withLoading(ClientService.getAllPaginated(pagination));
@@ -165,21 +198,34 @@
   }
 
   function handleCreateInvoiceFromClient(client: Client): void {
+    isCreatingInvoice.value = true;
+    selectedInvoiceForInvoiceModal.value = null;
     preselectedClientId.value = client.id;
-    isCreatingFromClient.value = true;
-    invoiceFromClientModalOpen.value = true;
+    invoiceModalOpen.value = true;
     drawerOpen.value = false;
   }
 
-  function handleInvoiceFromClientCancel(): void {
-    isCreatingFromClient.value = false;
+  function handleInvoiceModalCancel(): void {
+    invoiceModalOpen.value = false;
+    isCreatingInvoice.value = false;
+    selectedInvoiceForInvoiceModal.value = null;
     preselectedClientId.value = undefined;
-    invoiceFromClientModalOpen.value = false;
   }
 
-  async function handleInvoiceFromClientSaved(value: CreateInvoiceInput) {
-    await withLoading(InvoiceService.create(value));
-    handleInvoiceFromClientCancel();
+  async function handleInvoiceModalSaved(value: CreateInvoiceInput | UpdateInvoiceInput) {
+    await saveInvoiceCommand(value);
+    handleInvoiceModalCancel();
+  }
+
+  function handleEditInvoice(_clientId: number, invoice: Invoice): void {
+    isCreatingInvoice.value = false;
+    preselectedClientId.value = undefined;
+    selectedInvoiceForInvoiceModal.value = invoice;
+    invoiceModalOpen.value = true;
+  }
+
+  async function handleDeleteInvoice(_clientId: number, invoice: Invoice): Promise<void> {
+    await deleteInvoiceCommand(invoice);
   }
 
   async function handleModalSaved(value: CreateClientInput | UpdateClientInput) {

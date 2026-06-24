@@ -43,7 +43,10 @@ export class ClientRepository extends BaseRepository {
   }
 
   async findInvoicesByClientId(id: number) {
-    const client = await this.transaction.findOne(ClientEntity, { where: { id }, relations: ['invoices'] });
+    const client = await this.transaction.findOne(ClientEntity, {
+      where: { id },
+      relations: ['invoices', 'invoices.lines', 'invoices.client'],
+    });
     return client?.invoices || null;
   }
 }
