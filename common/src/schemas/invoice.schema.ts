@@ -6,11 +6,11 @@ export const InvoiceStatusEnum = z.enum(['DRAFT', 'SENT', 'PAID', 'CANCELLED']);
 
 export const createInvoiceSchema = z.object({
   clientId: z.number(),
-  lines: z.array(createInvoiceLineSchema).min(1),
+  lines: z.array(createInvoiceLineSchema),
 });
 
 export const updateInvoiceSchema = createInvoiceSchema.partial().extend({
-  lines: z.array(createInvoiceLineSchema.or(invoiceLineSchema)).optional(),
+  lines: z.array(createInvoiceLineSchema.or(invoiceLineSchema)),
   id: z.number(),
 });
 

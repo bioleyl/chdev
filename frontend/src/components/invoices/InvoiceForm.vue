@@ -11,7 +11,10 @@
     <v-window-item value="header">
       <v-form>
         <v-row>
-          <v-col cols="12">
+          <v-col
+            class="pa-4"
+            cols="12"
+          >
             <ClientSelect
               label="Client"
               v-model="form.clientId"
@@ -40,7 +43,7 @@
         <InvoiceLineTable
           key="table"
           v-if="!isLineFormOpen"
-          :lines="lineItems"
+          v-model:lines="form.lines"
           @delete="removeLine"
           @edit="openEditLineForm"
         />
@@ -85,7 +88,7 @@
   lang="ts"
   setup
 >
-  import { computed, ref } from 'vue';
+  import { ref } from 'vue';
   import ClientSelect from '@/components/clients/ClientSelect.vue';
   import InvoiceLineForm from '@/components/invoices/InvoiceLineForm.vue';
   import InvoiceLineTable from '@/components/invoices/InvoiceLineTable.vue';
@@ -113,14 +116,6 @@
 
   const isLoading = ref<boolean>(false);
 
-  const lineItems = computed<Array<CreateInvoiceLineInput>>(() => {
-    if (!Array.isArray(form.lines)) {
-      return [];
-    }
-
-    return form.lines.map((line) => normalizeLine(line));
-  });
-
   function createEmptyLine(): CreateInvoiceLineInput {
     return {
       prestationId: 0,
@@ -128,28 +123,6 @@
       unitPrice: 0,
       description: '',
     };
-  }
-
-  function normalizeLine(
-    line: CreateInvoiceLineInput & {
-      prestation?: {
-        label: string;
-        description?: string;
-      };
-    }
-  ): CreateInvoiceLineInput {
-    return {
-      prestationId: line.prestationId,
-      quantity: line.quantity,
-      unitPrice: line.unitPrice,
-      description: line.description || line.prestation?.description || line.prestation?.label || '',
-    };
-  }
-
-  function ensureLineArray(): void {
-    if (!Array.isArray(form.lines)) {
-      form.lines = [];
-    }
   }
 
   function openCreateLineForm(): void {
@@ -160,18 +133,13 @@
   }
 
   function openEditLineForm(index: number): void {
-    ensureLineArray();
-    if (!form.lines) {
-      return;
-    }
-
     const existingLine = form.lines[index];
     if (!existingLine) {
       return;
     }
 
     editingLineIndex.value = index;
-    lineFormInitialValues.value = normalizeLine(existingLine);
+    lineFormInitialValues.value = existingLine;
     lineFormKey.value += 1;
     isLineFormOpen.value = true;
   }
@@ -182,11 +150,6 @@
   }
 
   function saveLine(line: CreateInvoiceLineInput): void {
-    ensureLineArray();
-    if (!form.lines) {
-      return;
-    }
-
     if (editingLineIndex.value === null) {
       form.lines.push(line);
     } else {
@@ -197,10 +160,6 @@
   }
 
   function removeLine(index: number): void {
-    ensureLineArray();
-    if (!form.lines) {
-      return;
-    }
     form.lines.splice(index, 1);
   }
 

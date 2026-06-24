@@ -1,8 +1,7 @@
 import { BaseRepository } from '../common/base-repository.js';
 import { InvoiceEntity } from '../entities/invoice.entity.js';
-import { InvoiceLineEntity } from '../entities/invoice-line.entity.js';
 import { buildSearchCondition } from '../helpers/build-search-condition.helper.js';
-import type { CreateInvoiceInput, UpdateInvoiceInput } from '@chdev/common';
+import type { CreateInvoiceInput, CreateInvoiceLineInput, UpdateInvoiceInput } from '@chdev/common';
 import type { DeleteResult } from 'typeorm';
 import type { PaginationQuery } from '../middlewares/pagination.middleware.js';
 
@@ -63,7 +62,7 @@ export class InvoiceRepository extends BaseRepository {
   }
 
   async create(data: CreateInvoiceInput) {
-    const total = data.lines?.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0) || 0;
+    const total = this.recalculateTotal(data.lines);
     const invoice = this.transaction.create(InvoiceEntity, {
       ...data,
       status: 'DRAFT',
@@ -74,7 +73,7 @@ export class InvoiceRepository extends BaseRepository {
   }
 
   async update(data: UpdateInvoiceInput) {
-    const total = await this.recalculateTotal(data.id);
+    const total = this.recalculateTotal(data.lines);
     return this.transaction.save(InvoiceEntity, { ...data, total });
   }
 
@@ -85,16 +84,8 @@ export class InvoiceRepository extends BaseRepository {
   /**
    * Recalculate the total from invoice lines.
    */
-  async recalculateTotal(id: number): Promise<number> {
-    const qb = this.transaction
-      .createQueryBuilder(InvoiceLineEntity, 'il')
-      .select('SUM(il.quantity * il.unitPrice)', 'total')
-      .where('il.invoiceId = :id', { id });
-
-    const result = await qb.getRawOne();
-    const total = parseFloat(result?.total) || 0;
-
-    await this.transaction.update(InvoiceEntity, id, { total });
+  private recalculateTotal(lines: Array<CreateInvoiceLineInput>): number {
+    const total = lines?.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0) || 0;
     return total;
   }
 
@@ -102,7 +93,7 @@ export class InvoiceRepository extends BaseRepository {
    * Calculate the next invoice number based on the last invoice number in the database and the year.
    * Uses '-' as separator (not '/') to be Windows-filename-safe.
    */
-  async getNextInvoiceNumber(): Promise<string> {
+  private async getNextInvoiceNumber(): Promise<string> {
     const yearStart = new Date(new Date().getFullYear(), 0, 1, 0, 0, 0);
     const yearEnd = new Date(new Date().getFullYear(), 11, 31, 23, 59, 59);
 

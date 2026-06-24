@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { withTransaction } from '../helpers/with-transaction.helper.js';
 import { UserRepository } from '../repositories/user.repository.js';
 import type { LoginInput } from '@chdev/common';
 import type { Response } from 'express';
@@ -17,10 +16,8 @@ class AuthController {
   async login(req: TypedRequest<LoginInput>, res: Response): Promise<void> {
     const { email, password } = req.body;
 
-    const user = await withTransaction(async (transaction) => {
-      const repository = UserRepository.create(transaction);
-      return repository.findByEmail(email);
-    });
+    const repository = UserRepository.create();
+    const user = await repository.findByEmail(email);
 
     if (!user) {
       res.status(401).json({ error: 'Invalid credentials' });

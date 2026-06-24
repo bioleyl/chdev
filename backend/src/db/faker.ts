@@ -392,13 +392,10 @@ function randomStatus(): InvoiceStatus {
   return 'DRAFT';
 }
 
-const numberPrefixes = ['FA', 'IF', 'INV', 'RIF']; // Facture, Invoice, Reverse Invoice Facture
-
 /** Generate a random invoice number */
 export function generateInvoiceNumber(year: number, seq: number): string {
-  const prefix = randomItem(numberPrefixes);
   // Use '-' separator (not '/') to be Windows-filename-safe
-  return `${prefix}-${year}-${String(seq).padStart(4, '0')}`;
+  return `${year}-${String(seq).padStart(4, '0')}`;
 }
 
 /** Generate a complete invoice (without prestation references — caller must resolve) */

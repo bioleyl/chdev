@@ -7,27 +7,21 @@ import type { TypedRequest } from '../middlewares/validate.middleware.js';
 
 export class ClientController {
   async getAll(_req: Request, res: Response) {
-    const clients = await withTransaction(async (transaction) => {
-      const repository = ClientRepository.create(transaction);
-      return repository.findAll();
-    });
+    const repository = ClientRepository.create();
+    const clients = await repository.findAll();
     res.json(clients);
   }
 
   async getAllPaginated({ query }: PaginatedRequest, res: Response) {
-    const [clients, total] = await withTransaction(async (transaction) => {
-      const repository = ClientRepository.create(transaction);
-      return repository.findAllPaginated(query);
-    });
+    const repository = ClientRepository.create();
+    const [clients, total] = await repository.findAllPaginated(query);
     res.json({ data: clients, total });
   }
 
   async getById(req: TypedRequest<null, IdParamInput>, res: Response) {
     const { id } = req.params;
-    const client = await withTransaction(async (transaction) => {
-      const repository = ClientRepository.create(transaction);
-      return repository.findById(id);
-    });
+    const repository = ClientRepository.create();
+    const client = await repository.findById(id);
     if (!client) {
       return res.status(404).json({ error: 'Not found' });
     }
@@ -70,10 +64,8 @@ export class ClientController {
 
   async getInvoicesByClientId(req: TypedRequest<null, IdParamInput>, res: Response) {
     const { id } = req.params;
-    const invoices = await withTransaction(async (transaction) => {
-      const repository = ClientRepository.create(transaction);
-      return repository.findInvoicesByClientId(id);
-    });
+    const repository = ClientRepository.create();
+    const invoices = await repository.findInvoicesByClientId(id);
     if (!invoices) {
       return res.status(404).json({ error: 'Not found' });
     }

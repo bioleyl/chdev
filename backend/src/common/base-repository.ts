@@ -1,3 +1,4 @@
+import { AppDataSource } from '../db/connection.js';
 import type { EntityManager } from 'typeorm';
 
 export abstract class BaseRepository {
@@ -11,8 +12,8 @@ export abstract class BaseRepository {
     this: new (
       transaction: EntityManager
     ) => T,
-    transaction: EntityManager
+    transaction?: EntityManager
   ): T {
-    return new this(transaction);
+    return new this(transaction ?? AppDataSource.manager);
   }
 }

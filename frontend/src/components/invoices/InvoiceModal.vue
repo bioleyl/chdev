@@ -55,7 +55,7 @@
   const initialCreateData: CreateInvoiceInput = {
     //@ts-expect-error
     clientId: undefined,
-    lines: [{ prestationId: 0, quantity: 1, unitPrice: 0 }],
+    lines: [],
   };
 
   const data = computed<z.input<TSchema>>(

@@ -7,27 +7,21 @@ import type { TypedRequest } from '../middlewares/validate.middleware.js';
 
 class PrestationController {
   async getAll(_req: Request, res: Response) {
-    const prestations = await withTransaction(async (transaction) => {
-      const repository = PrestationRepository.create(transaction);
-      return repository.findAll();
-    });
+    const repository = PrestationRepository.create();
+    const prestations = await repository.findAll();
     res.json(prestations);
   }
 
   async getAllPaginated({ query }: PaginatedRequest, res: Response) {
-    const [prestations, total] = await withTransaction(async (transaction) => {
-      const repository = PrestationRepository.create(transaction);
-      return repository.findAllPaginated(query);
-    });
+    const repository = PrestationRepository.create();
+    const [prestations, total] = await repository.findAllPaginated(query);
     res.json({ data: prestations, total });
   }
 
   async getById(req: TypedRequest<null, IdParamInput>, res: Response) {
     const { id } = req.params;
-    const prestation = await withTransaction(async (transaction) => {
-      const repository = PrestationRepository.create(transaction);
-      return repository.findById(id);
-    });
+    const repository = PrestationRepository.create();
+    const prestation = await repository.findById(id);
     if (!prestation) {
       return res.status(404).json({ error: 'Not found' });
     }

@@ -9,27 +9,21 @@ import type { TypedRequest } from '../middlewares/validate.middleware.js';
 
 class InvoiceController {
   async getAll(_req: Request, res: Response) {
-    const invoices = await withTransaction(async (transaction) => {
-      const repository = InvoiceRepository.create(transaction);
-      return repository.findAll();
-    });
+    const repository = InvoiceRepository.create();
+    const invoices = await repository.findAll();
     res.json(invoices);
   }
 
   async getAllPaginated({ query }: PaginatedRequest, res: Response) {
-    const [invoices, total] = await withTransaction(async (transaction) => {
-      const repository = InvoiceRepository.create(transaction);
-      return repository.findAllPaginated(query);
-    });
+    const repository = InvoiceRepository.create();
+    const [invoices, total] = await repository.findAllPaginated(query);
     res.json({ data: invoices, total });
   }
 
   async getById(req: TypedRequest<null, IdParamInput>, res: Response) {
     const { id } = req.params;
-    const invoice = await withTransaction(async (transaction) => {
-      const repository = InvoiceRepository.create(transaction);
-      return repository.findById(id);
-    });
+    const repository = InvoiceRepository.create();
+    const invoice = await repository.findById(id);
     if (!invoice) {
       return res.status(404).json({ error: 'Not found' });
     }
@@ -56,7 +50,7 @@ class InvoiceController {
       const invoiceRepo = InvoiceRepository.create(transaction);
       const invoiceLineRepo = InvoiceLineRepository.create(transaction);
       const { lines, ...invoiceData } = body;
-      const updated = await invoiceRepo.update(invoiceData);
+      const updated = await invoiceRepo.update({ ...invoiceData, lines });
       if (!updated) {
         return res.status(404).json({ error: 'Not found' });
       }
@@ -65,7 +59,6 @@ class InvoiceController {
         await invoiceLineRepo.create({ ...line, invoiceId: id });
       }
 
-      await invoiceRepo.recalculateTotal(id);
       return await invoiceRepo.findById(id);
     });
     res.json(updated);
