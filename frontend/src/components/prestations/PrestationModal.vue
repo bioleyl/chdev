@@ -55,7 +55,8 @@
   const initialCreateData: CreatePrestationInput = {
     label: '',
     description: '',
-    unitPrice: 0,
+    // @ts-expect-error
+    unitPrice: undefined,
     unit: '',
   };
 

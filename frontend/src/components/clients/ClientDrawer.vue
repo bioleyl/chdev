@@ -6,10 +6,10 @@
   >
     <v-card
       flat
-      v-if="prestation"
+      v-if="client"
     >
       <v-card-title class="d-flex align-center justify-space-between">
-        <span class="text-h5">Détails de la prestation</span>
+        <span class="text-h5">Détails du client</span>
         <v-btn
           icon="mdi-close"
           variant="text"
@@ -24,71 +24,84 @@
           <v-list-item>
             <template v-slot:prepend>
               <v-icon
-                icon="mdi-tag"
+                icon="mdi-account"
                 size="small"
               ></v-icon>
             </template>
-            <v-list-item-title>Libellé</v-list-item-title>
+            <v-list-item-title>Raison sociale</v-list-item-title>
             <template v-slot:append>
-              <v-list-item-subtitle>{{ prestation.label }}</v-list-item-subtitle>
-            </template>
-          </v-list-item>
-
-          <v-list-item v-if="prestation.description">
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-text"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Description</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle>{{ prestation.description }}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ client.companyName }}</v-list-item-subtitle>
             </template>
           </v-list-item>
 
           <v-list-item>
             <template v-slot:prepend>
               <v-icon
-                icon="mdi-currency-usd"
+                icon="mdi-email"
                 size="small"
               ></v-icon>
             </template>
-            <v-list-item-title>Prix unitaire</v-list-item-title>
+            <v-list-item-title>Email</v-list-item-title>
             <template v-slot:append>
-              <v-list-item-subtitle> {{ prestation.unitPrice.toFixed(2) }} € </v-list-item-subtitle>
+              <v-list-item-subtitle>{{ client.email || '—' }}</v-list-item-subtitle>
             </template>
           </v-list-item>
 
           <v-list-item>
             <template v-slot:prepend>
               <v-icon
-                icon="mdi-format-unit"
+                icon="mdi-phone"
                 size="small"
               ></v-icon>
             </template>
-            <v-list-item-title>Unité</v-list-item-title>
+            <v-list-item-title>Téléphone</v-list-item-title>
             <template v-slot:append>
-              <v-list-item-subtitle>{{ prestation.unit }}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ client.phone || '—' }}</v-list-item-subtitle>
             </template>
           </v-list-item>
 
           <v-list-item>
             <template v-slot:prepend>
               <v-icon
-                icon="mdi-clock-outline"
+                icon="mdi-map-marker"
                 size="small"
               ></v-icon>
             </template>
-            <v-list-item-title>Créée le</v-list-item-title>
+            <v-list-item-title>Adresse</v-list-item-title>
             <template v-slot:append>
               <v-list-item-subtitle>
-                {{ formatDate(prestation.createdAt) }}
+                {{ [client.address, client.zipCode, client.city, client.country].filter(Boolean).join(', ') || '—' }}
               </v-list-item-subtitle>
+            </template>
+          </v-list-item>
+
+          <v-list-item v-if="client.notes">
+            <template v-slot:prepend>
+              <v-icon
+                icon="mdi-note"
+                size="small"
+              ></v-icon>
+            </template>
+            <v-list-item-title>Notes</v-list-item-title>
+            <template v-slot:append>
+              <v-list-item-subtitle>{{ client.notes }}</v-list-item-subtitle>
             </template>
           </v-list-item>
         </v-list>
       </v-card-text>
+
+      <v-divider></v-divider>
+
+      <v-card-actions class="pa-4">
+        <v-btn
+          color="primary"
+          prepend-icon="mdi-file-document-plus"
+          variant="tonal"
+          @click="createInvoice"
+        >
+          Créer une facture
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </v-navigation-drawer>
 </template>
@@ -98,15 +111,17 @@
   setup
 >
   import { computed } from 'vue';
-  import type { Prestation } from '@chdev/common';
+  import type { Client } from '@chdev/common';
 
   const props = defineProps<{
     modelValue: boolean;
-    prestation: Prestation | null;
+    client: Client | null;
   }>();
 
   const emit = defineEmits<{
     'update:modelValue': [value: boolean];
+    cancel: [];
+    createInvoice: [client: Client];
   }>();
 
   const internalDrawer = computed({
@@ -118,13 +133,9 @@
     emit('update:modelValue', false);
   }
 
-  function formatDate(date: Date): string {
-    return new Intl.DateTimeFormat('fr-FR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(new Date(date));
+  function createInvoice(): void {
+    if (props.client) {
+      emit('createInvoice', props.client);
+    }
   }
 </script>

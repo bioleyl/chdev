@@ -45,6 +45,22 @@
       @cancel="handleCancel"
       @saved="handleModalSaved"
     />
+
+    <ClientDrawer
+      v-model="drawerOpen"
+      :client="rowSelected"
+      @create-invoice="handleCreateInvoiceFromClient"
+    />
+
+    <InvoiceModal
+      v-model="invoiceFromClientModalOpen"
+      :invoice="null"
+      :is-creating="isCreatingFromClient"
+      :preselected-client-id="preselectedClientId"
+      :schema="invoiceSchema"
+      @cancel="handleInvoiceFromClientCancel"
+      @saved="handleInvoiceFromClientSaved"
+    />
   </v-container>
 </template>
 
@@ -52,13 +68,22 @@
   lang="ts"
   setup
 >
-  import { createClientSchema, updateClientSchema } from '@chdev/common';
+  import { createClientSchema, createInvoiceSchema, updateClientSchema } from '@chdev/common';
   import { computed, onMounted, ref, watch } from 'vue';
+  import ClientDrawer from '@/components/clients/ClientDrawer.vue';
   import ClientList from '@/components/clients/ClientList.vue';
   import ClientModal from '@/components/clients/ClientModal.vue';
+  import InvoiceModal from '@/components/invoices/InvoiceModal.vue';
   import { useLoading } from '../composables/useLoading';
   import { ClientService } from '../services/client.service';
-  import type { Client, CreateClientInput, PaginationInput, UpdateClientInput } from '@chdev/common';
+  import { InvoiceService } from '../services/invoice.service';
+  import type {
+    Client,
+    CreateClientInput,
+    CreateInvoiceInput,
+    PaginationInput,
+    UpdateClientInput,
+  } from '@chdev/common';
 
   const { isLoading, withLoading } = useLoading();
   const clients = ref<Array<Client>>([]);
@@ -68,6 +93,10 @@
   const totalClients = ref<number>(0);
   const modalOpen = ref<boolean>(false);
   const isCreating = ref<boolean>(false);
+  const drawerOpen = ref<boolean>(false);
+  const isCreatingFromClient = ref<boolean>(false);
+  const invoiceFromClientModalOpen = ref<boolean>(false);
+  const preselectedClientId = ref<number | undefined>(undefined);
 
   const options = ref<PaginationInput>({
     search: '',
@@ -87,11 +116,23 @@
   });
 
   watch(rowSelected, (newValue) => {
-    // here open invoice list
+    if (newValue !== null) {
+      drawerOpen.value = true;
+    }
+  });
+
+  watch(drawerOpen, (newValue) => {
+    if (!newValue) {
+      rowSelected.value = null;
+    }
   });
 
   const schema = computed(() => {
     return isCreating.value ? createClientSchema : updateClientSchema;
+  });
+
+  const invoiceSchema = computed(() => {
+    return createInvoiceSchema;
   });
 
   async function fetchClients(pagination: PaginationInput) {
@@ -121,6 +162,24 @@
     selectedClient.value = null;
     isCreating.value = false;
     modalOpen.value = false;
+  }
+
+  function handleCreateInvoiceFromClient(client: Client): void {
+    preselectedClientId.value = client.id;
+    isCreatingFromClient.value = true;
+    invoiceFromClientModalOpen.value = true;
+    drawerOpen.value = false;
+  }
+
+  function handleInvoiceFromClientCancel(): void {
+    isCreatingFromClient.value = false;
+    preselectedClientId.value = undefined;
+    invoiceFromClientModalOpen.value = false;
+  }
+
+  async function handleInvoiceFromClientSaved(value: CreateInvoiceInput) {
+    await withLoading(InvoiceService.create(value));
+    handleInvoiceFromClientCancel();
   }
 
   async function handleModalSaved(value: CreateClientInput | UpdateClientInput) {

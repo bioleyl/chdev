@@ -27,8 +27,8 @@
       </v-col>
     </v-row>
     <PrestationDrawer
-      v-model:is-open="drawer"
-      v-model:prestation="rowSelected"
+      v-model="drawer"
+      :prestation="rowSelected"
     />
     <PrestationModal
       v-model="modalOpen"
@@ -77,7 +77,13 @@
   });
 
   watch(rowSelected, (newValue) => {
-    drawer.value = !!newValue;
+    drawer.value = newValue !== null;
+  });
+
+  watch(drawer, (newValue) => {
+    if (!newValue) {
+      rowSelected.value = null;
+    }
   });
 
   const schema = computed(() => {
@@ -97,18 +103,17 @@
 
   function startCreate() {
     isCreating.value = true;
-    selectedPrestation.value = null;
     modalOpen.value = true;
   }
 
   function startEdit(item: Prestation) {
     isCreating.value = false;
-    selectedPrestation.value = item;
     modalOpen.value = true;
+    selectedPrestation.value = item;
   }
 
   function handleCancel() {
-    selectedPrestation.value = null;
+    rowSelected.value = null;
     isCreating.value = false;
     modalOpen.value = false;
   }

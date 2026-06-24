@@ -39,6 +39,7 @@
     invoice: z.input<TSchema> | null;
     isCreating: boolean;
     schema: TSchema;
+    preselectedClientId?: number;
   }>();
 
   const emit = defineEmits<{
@@ -58,9 +59,15 @@
     lines: [],
   };
 
-  const data = computed<z.input<TSchema>>(
-    () => (props.isCreating ? initialCreateData : props.invoice) as z.input<TSchema>
-  );
+  const data = computed<z.input<TSchema>>(() => {
+    if (props.isCreating) {
+      return {
+        clientId: props.preselectedClientId ?? undefined,
+        lines: [],
+      } as z.input<TSchema>;
+    }
+    return props.invoice as z.input<TSchema>;
+  });
 
   function handleCancel() {
     emit('cancel');

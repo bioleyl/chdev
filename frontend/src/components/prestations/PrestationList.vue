@@ -6,7 +6,7 @@
   import type { PaginationInput, Prestation } from '@chdev/common';
 
   const options = defineModel<PaginationInput>('options', { required: true });
-  const selectedPrestation = defineModel<Prestation | null>('selectedPrestation', { required: false });
+  const rowSelected = defineModel<Prestation | null>('rowSelected', { required: false });
 
   const props = defineProps<{
     items: Array<Prestation>;
@@ -38,7 +38,7 @@
 <template>
   <PaginatedTable
     v-model:options="options"
-    v-model:row-selected="selectedPrestation"
+    v-model:row-selected="rowSelected"
     :headers="headers"
     :is-loading="isLoading"
     :items="items"
