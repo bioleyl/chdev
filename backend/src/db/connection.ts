@@ -23,7 +23,7 @@ function toTypeOrmPattern(relativePath: string): string {
 }
 
 export const AppDataSource = new DataSource({
-  type: 'better-sqlite3',
+  type: 'sqlite',
   database: EnvHelper.getVariable('DB_PATH', defaultDbPath),
   synchronize: false,
   logging: EnvHelper.getVariable('NODE_ENV') !== 'production',
