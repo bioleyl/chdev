@@ -60,14 +60,12 @@ class InvoiceController {
       if (!updated) {
         return res.status(404).json({ error: 'Not found' });
       }
-      // Update invoice lines
+      await invoiceLineRepo.deleteByInvoiceId(id);
       for (const line of lines ?? []) {
-        if ('id' in line) {
-          await invoiceLineRepo.update(line);
-        } else {
-          await invoiceLineRepo.create({ ...line, invoiceId: id });
-        }
+        await invoiceLineRepo.create({ ...line, invoiceId: id });
       }
+
+      await invoiceRepo.recalculateTotal(id);
       return await invoiceRepo.findById(id);
     });
     res.json(updated);

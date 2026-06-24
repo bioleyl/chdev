@@ -1,5 +1,6 @@
 import { BaseRepository } from '../common/base-repository.js';
 import { InvoiceEntity } from '../entities/invoice.entity.js';
+import { InvoiceLineEntity } from '../entities/invoice-line.entity.js';
 import { buildSearchCondition } from '../helpers/build-search-condition.helper.js';
 import type { CreateInvoiceInput, UpdateInvoiceInput } from '@chdev/common';
 import type { DeleteResult } from 'typeorm';
@@ -74,7 +75,7 @@ export class InvoiceRepository extends BaseRepository {
 
   async update(data: UpdateInvoiceInput) {
     const total = await this.recalculateTotal(data.id);
-    return this.transaction.save({ ...data, total });
+    return this.transaction.save(InvoiceEntity, { ...data, total });
   }
 
   async delete(id: number): Promise<DeleteResult> {
@@ -86,9 +87,8 @@ export class InvoiceRepository extends BaseRepository {
    */
   async recalculateTotal(id: number): Promise<number> {
     const qb = this.transaction
-      .createQueryBuilder()
+      .createQueryBuilder(InvoiceLineEntity, 'il')
       .select('SUM(il.quantity * il.unitPrice)', 'total')
-      .addFrom('invoice_line', 'il')
       .where('il.invoiceId = :id', { id });
 
     const result = await qb.getRawOne();

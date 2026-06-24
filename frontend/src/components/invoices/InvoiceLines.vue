@@ -39,7 +39,7 @@
 >
   import { computed } from 'vue';
   import PrestationAutocomplete from '@/components/prestations/PrestationAutocomplete.vue';
-  import { prestationService } from '@/services/prestation.service';
+  import { PrestationService } from '@/services/prestation.service';
   import type { CreateInvoiceInput } from '@chdev/common';
 
   const props = defineProps<{
@@ -74,7 +74,7 @@
     }
 
     line.prestationId = prestationId;
-    const prestation = await prestationService.getById(prestationId);
+    const prestation = await PrestationService.getById(prestationId);
     if (prestation) {
       line.unitPrice = prestation.unitPrice;
     }
