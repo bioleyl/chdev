@@ -1,96 +1,9 @@
 <template>
-  <v-navigation-drawer
-    location="right"
-    width="400"
+  <GenericDrawer
+    title="Détails de la prestation"
     v-model="internalDrawer"
-  >
-    <v-card
-      flat
-      v-if="prestation"
-    >
-      <v-card-title class="d-flex align-center justify-space-between">
-        <span class="text-h5">Détails de la prestation</span>
-        <v-btn
-          icon="mdi-close"
-          variant="text"
-          @click="closeDrawer"
-        ></v-btn>
-      </v-card-title>
-
-      <v-divider></v-divider>
-
-      <v-card-text class="pa-4">
-        <v-list dense>
-          <v-list-item>
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-tag"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Libellé</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle>{{ prestation.label }}</v-list-item-subtitle>
-            </template>
-          </v-list-item>
-
-          <v-list-item v-if="prestation.description">
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-text"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Description</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle>{{ prestation.description }}</v-list-item-subtitle>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-currency-usd"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Prix unitaire</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle> {{ prestation.unitPrice.toFixed(2) }} € </v-list-item-subtitle>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-format-unit"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Unité</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle>{{ prestation.unit }}</v-list-item-subtitle>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-clock-outline"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Créée le</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle>
-                {{ formatDate(prestation.createdAt) }}
-              </v-list-item-subtitle>
-            </template>
-          </v-list-item>
-        </v-list>
-      </v-card-text>
-    </v-card>
-  </v-navigation-drawer>
+    :details="details"
+  />
 </template>
 
 <script
@@ -98,6 +11,7 @@
   setup
 >
   import { computed } from 'vue';
+  import GenericDrawer from '../common/GenericDrawer.vue';
   import type { Prestation } from '@chdev/common';
 
   const props = defineProps<{
@@ -114,9 +28,44 @@
     set: (value: boolean) => emit('update:modelValue', value),
   });
 
-  function closeDrawer(): void {
-    emit('update:modelValue', false);
-  }
+  const details = computed(() => {
+    if (!props.prestation) {
+      return [];
+    }
+
+    const items: Array<{ name: string; value: string | number; icon?: string }> = [
+      {
+        name: 'Libellé',
+        value: props.prestation.label,
+        icon: 'mdi-tag',
+      },
+      {
+        name: 'Prix unitaire',
+        value: `${props.prestation.unitPrice.toFixed(2)} €`,
+        icon: 'mdi-currency-usd',
+      },
+      {
+        name: 'Unité',
+        value: props.prestation.unit,
+        icon: 'mdi-format-unit',
+      },
+      {
+        name: 'Créée le',
+        value: formatDate(props.prestation.createdAt),
+        icon: 'mdi-clock-outline',
+      },
+    ];
+
+    if (props.prestation.description) {
+      items.splice(1, 0, {
+        name: 'Description',
+        value: props.prestation.description,
+        icon: 'mdi-text',
+      });
+    }
+
+    return items;
+  });
 
   function formatDate(date: Date): string {
     return new Intl.DateTimeFormat('fr-FR', {

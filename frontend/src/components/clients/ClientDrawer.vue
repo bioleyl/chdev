@@ -1,109 +1,21 @@
 <template>
-  <v-navigation-drawer
-    location="right"
-    width="400"
+  <GenericDrawer
+    title="Détails du client"
     v-model="internalDrawer"
+    :details="details"
   >
-    <v-card
-      flat
-      v-if="client"
-    >
-      <v-card-title class="d-flex align-center justify-space-between">
-        <span class="text-h5">Détails du client</span>
-        <v-btn
-          icon="mdi-close"
-          variant="text"
-          @click="closeDrawer"
-        ></v-btn>
-      </v-card-title>
-
-      <v-divider></v-divider>
-
-      <v-card-text class="pa-4">
-        <v-list dense>
-          <v-list-item>
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-account"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Raison sociale</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle>{{ client.companyName }}</v-list-item-subtitle>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-email"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Email</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle>{{ client.email || '—' }}</v-list-item-subtitle>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-phone"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Téléphone</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle>{{ client.phone || '—' }}</v-list-item-subtitle>
-            </template>
-          </v-list-item>
-
-          <v-list-item>
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-map-marker"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Adresse</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle>
-                {{ [client.address, client.zipCode, client.city, client.country].filter(Boolean).join(', ') || '—' }}
-              </v-list-item-subtitle>
-            </template>
-          </v-list-item>
-
-          <v-list-item v-if="client.notes">
-            <template v-slot:prepend>
-              <v-icon
-                icon="mdi-note"
-                size="small"
-              ></v-icon>
-            </template>
-            <v-list-item-title>Notes</v-list-item-title>
-            <template v-slot:append>
-              <v-list-item-subtitle>{{ client.notes }}</v-list-item-subtitle>
-            </template>
-          </v-list-item>
-        </v-list>
-      </v-card-text>
-
-      <v-divider></v-divider>
-
-      <v-card-actions class="pa-4">
-        <v-btn
-          color="primary"
-          prepend-icon="mdi-file-document-plus"
-          variant="tonal"
-          @click="createInvoice"
-        >
-          Créer une facture
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-navigation-drawer>
+    <template v-slot:actions>
+      <v-btn
+        color="primary"
+        prepend-icon="mdi-file-document-plus"
+        variant="tonal"
+        v-if="props.client"
+        @click="createInvoice"
+      >
+        Créer une facture
+      </v-btn>
+    </template>
+  </GenericDrawer>
 </template>
 
 <script
@@ -111,6 +23,7 @@
   setup
 >
   import { computed } from 'vue';
+  import GenericDrawer from '../common/GenericDrawer.vue';
   import type { Client } from '@chdev/common';
 
   const props = defineProps<{
@@ -129,9 +42,47 @@
     set: (value: boolean) => emit('update:modelValue', value),
   });
 
-  function closeDrawer(): void {
-    emit('update:modelValue', false);
-  }
+  const details = computed(() => {
+    if (!props.client) {
+      return [];
+    }
+
+    const items: Array<{ name: string; value: string | number; icon?: string }> = [
+      {
+        name: 'Raison sociale',
+        value: props.client.companyName,
+        icon: 'mdi-account',
+      },
+      {
+        name: 'Email',
+        value: props.client.email || '—',
+        icon: 'mdi-email',
+      },
+      {
+        name: 'Téléphone',
+        value: props.client.phone || '—',
+        icon: 'mdi-phone',
+      },
+      {
+        name: 'Adresse',
+        value:
+          [props.client.address, `${props.client.zipCode} ${props.client.city}`, props.client.country]
+            .filter(Boolean)
+            .join(', ') || '—',
+        icon: 'mdi-map-marker',
+      },
+    ];
+
+    if (props.client.notes) {
+      items.push({
+        name: 'Notes',
+        value: props.client.notes,
+        icon: 'mdi-note',
+      });
+    }
+
+    return items;
+  });
 
   function createInvoice(): void {
     if (props.client) {
