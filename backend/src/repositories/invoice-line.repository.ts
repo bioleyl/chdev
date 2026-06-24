@@ -1,6 +1,6 @@
 import { BaseRepository } from '../common/base-repository.js';
 import { InvoiceLineEntity } from '../entities/invoice-line.entity.js';
-import type { CreateInvoiceLineInput, UpdateInvoiceLineInput } from '@chdev/common';
+import type { CreateInvoiceLineInput } from '@chdev/common';
 import type { DeleteResult } from 'typeorm';
 
 export class InvoiceLineRepository extends BaseRepository {
@@ -26,10 +26,6 @@ export class InvoiceLineRepository extends BaseRepository {
   async create(data: CreateInvoiceLineInput & { invoiceId: number }) {
     const line = this.transaction.create(InvoiceLineEntity, data);
     return this.transaction.save(line);
-  }
-
-  async update(data: UpdateInvoiceLineInput) {
-    return this.transaction.save(InvoiceLineEntity, data);
   }
 
   async delete(id: number): Promise<DeleteResult> {

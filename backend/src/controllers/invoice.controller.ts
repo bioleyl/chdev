@@ -50,11 +50,11 @@ class InvoiceController {
       const invoiceRepo = InvoiceRepository.create(transaction);
       const invoiceLineRepo = InvoiceLineRepository.create(transaction);
       const { lines, ...invoiceData } = body;
+      await invoiceLineRepo.deleteByInvoiceId(id);
       const updated = await invoiceRepo.update({ ...invoiceData, lines });
       if (!updated) {
         return res.status(404).json({ error: 'Not found' });
       }
-      await invoiceLineRepo.deleteByInvoiceId(id);
       for (const line of lines ?? []) {
         await invoiceLineRepo.create({ ...line, invoiceId: id });
       }
