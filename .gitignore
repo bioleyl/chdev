@@ -6,3 +6,4 @@ cache/
 *.log
 package-lock.json
 system-prompt-*
+test-results/
