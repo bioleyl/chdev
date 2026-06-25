@@ -86,3 +86,4 @@ npm run dev        # Lance les deux en parallèle
 - [Documentation officielle Node.js](https://nodejs.org/fr/docs/)
 - [Documentation officielle npm](https://docs.npmjs.com/)
 - [The Net Ninja — Node.js Tutorial (YouTube)](https://www.youtube.com/playlist?list=PL4cUxeGkcC9hH1bAj--JXmO5Q8HcOmUqm)
+- [Grafikart — Node.js (YouTube)](https://www.youtube.com/watch?v=0PA69L88HeI&list=PLjwdMgw5TTLV7VsXd9NOeq39soYXORezN)

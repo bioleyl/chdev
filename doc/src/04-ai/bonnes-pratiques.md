@@ -272,6 +272,6 @@ L'agent identifie les fichiers à supprimer et les retire proprement.
 
 ## Ressources pour aller plus loin
 
-- [Prompts efficaces pour le code](https://www.anthropic.com/engineering/prompts)
+- [Anthropic — Prompt Engineering Guide](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering)
 - [OpenAI Cookbook — Exemples de prompts](https://github.com/openai/openai-cookbook)
 - [Prompt Engineering Guide](https://www.promptingguide.ai/)

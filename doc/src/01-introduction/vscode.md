@@ -317,5 +317,6 @@ La commande `npm run dev` lance les deux serveurs en parallèle :
 
 - [Documentation officielle VS Code](https://code.visualstudio.com/docs)
 - [Raccourcis clavier VS Code](https://code.visualstudio.com/docs/getstarted/keybindings)
-- [Guide de démarrage — VS Code](https://code.visualstudio.com/docs/introvideos/tours)
+- [Guide de démarrage — VS Code](https://code.visualstudio.com/docs/getstarted/introvideos)
 - [Extensions recommandées par le projet](https://code.visualstudio.com/docs/editor/extension-marketplace)
+- [Grafikart — JavaScript (YouTube)](https://www.youtube.com/watch?v=asToYAq0F-I&list=PLjwdMgw5TTLXgsTQE_1PpRkC_yX47ZcGV)

@@ -1,182 +1,10 @@
-# TypeScript
-
-## Qu'est-ce que TypeScript ?
-
-**TypeScript** est une extension de JavaScript qui ajoute un **système de types statiques**. Le code TypeScript est compilé (transpilé) en JavaScript avant d'être exécuté.
-
-> **Analogie WinDev** : TypeScript ≈ WinDev lui-même. WinDev est un langage typé (vous déclarez `i est un entier`, `sChaine est une chaîne`). JavaScript pur, c'est comme du code sans déclaration de type — TypeScript rajoute cette rigueur.
-
-### Pourquoi TypeScript ?
-
-| Sans TypeScript (JavaScript) | Avec TypeScript |
-|-------------------------------|-----------------|
-| Les erreurs de type apparaissent **à l'exécution** | Les erreurs de type sont détectées **à la compilation** |
-| Autocomplétion limitée dans l'éditeur | Autocomplétion intelligente (IntelliSense) |
-| Refactorisation risquée | Refactorisation sécurisée (le compilateur signale les usages cassés) |
-| Documentation implicite | Les types servent de documentation vivante |
-
-## Types de base
-
-```typescript
-// Types primitifs
-let nom: string = "Dupont";
-let age: number = 30;
-let actif: boolean = true;
-
-// Tableau
-let roles: string[] = ["ADMIN", "EDITOR"];
-
-// Objet avec interface
-interface Utilisateur {
-  id: number;
-  nom: string;
-  email: string;
-  role: "ADMIN" | "EDITOR" | "VIEWER";  // Type union (énumération)
-}
-
-// Optionnel
-interface Adresse {
-  rue: string;
-  ville?: string;  // Peut être absent ou undefined
-}
-
-// Type inconnu mais non-null
-let donnees: unknown = JSON.parse(raw);
-```
-
-## `interface` vs `type`
-
-Dans ce projet, vous verrez les deux. En pratique :
-
-- **`interface`** : Privilégiée pour décrire la forme des objets (extensible via `declaration merging`)
-- **`type`** : Utilisée pour les unions, les intersections, les types calculés
-
-```typescript
-// Interface — forme d'un objet
-interface Client {
-  id: number;
-  companyName: string;
-  email?: string;
-  phone?: string;
-}
-
-// Type — alias ou union
-type Role = "ADMIN" | "EDITOR" | "VIEWER";
-type Resultat<T> = { succes: true; data: T } | { succes: false; erreur: string };
-```
-
-## Fonction classique vs fonction fléchée (arrow function)
-
-En TypeScript (et en JavaScript), il existe deux façons de définir des fonctions :
-
-### Syntaxe fonction classique
-
-```typescript
-function additionner(a: number, b: number): number {
-  return a + b;
-}
-```
-
-### Syntaxe arrow function
-
-```typescript
-const additionner = (a: number, b: number): number => {
-  return a + b;
-};
-```
-
-### Quand utiliser laquelle ?
-
-Dans ce projet, les **arrow functions** sont privilégiées pour les fonctions stockées dans des variables. Voici les différences importantes :
-
-| Critère | Fonction classique | Arrow function |
-|---------|-------------------|----------------|
-| Déclaration | `function nom() {}` | `const nom = () => {}` |
-| `this` | Bind dynamique (dépend de l'appel) | Hérite de `this` du contexte parent |
-| Constructeur | Peut servir de constructeur avec `new` | **Pas** de `new` possible |
-| `arguments` | Disponible via `arguments` | Non disponible |
-
-> **⚠️ Attention au `this`** : C'est la différence la plus importante ! Une arrow function **n'a pas son propre `this`** — elle utilise celui du contexte où elle a été créée.
-
-```typescript
-class Compteur {
-  private valeur: number = 0;
-
-  // ✅ Fonction classique : `this` est lié à l'appel
-  incrementer(): void {
-    this.valeur++;
-    // Dans un callback, `this` est perdu sans arrow function
-    setTimeout(function () {
-      console.log(this.valeur); // ❌ undefined !
-    }, 100);
-  }
-
-  // ✅ Arrow function : `this` est hérité du contexte
-  incrementer2(): void {
-    this.valeur++;
-    setTimeout(() => {
-      console.log(this.valeur); // ✅ 1 — `this` est bien le compteur
-    }, 100);
-  }
-}
-```
-
-> 💡 **Règle simple** : Dans ce projet, utilisez les arrow functions pour les callbacks, les handlers, et les fonctions stockées dans des variables. Utilisez les fonctions classiques pour les méthodes de classes où vous avez besoin de `this` ou pour les fonctions nommées simples.
-
-## Les génériques
-
-Les génériques permettent de créer des types paramétrés, comme des templates :
-
-```typescript
-// Réponse paginée — fonctionne avec n'importe quel type
-interface PaginatedResponse<T> {
-  data: T[];
-  total: number;
-}
-
-// Utilisation
-type ClientsResponse = PaginatedResponse<Client>;
-// = { data: Client[]; total: number }
-```
-
-## `tsconfig.json` — Configuration du compilateur
-
-Chaque workspace a son propre `tsconfig.json` qui configure la compilation TypeScript :
-
-```json
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "strict": true,
-    "outDir": "./dist"
-  }
-}
-```
-
-| Option | Rôle |
-|--------|------|
-| `target` | Version de JavaScript cible |
-| `module` | Système de modules (ES modules ici) |
-| `strict` | Active tous les contrôles de type stricts |
-| `outDir` | Dossier de sortie du code compilé |
-
-## TypeScript dans ce projet
-
-- Le code source est en `.ts` (TypeScript)
-- Il est compilé en `.js` dans les dossiers `dist/`
-- Le backend utilise `tsx` en développement pour exécuter le TypeScript directement (sans compilation préalable)
-- Le frontend utilise `vue-tsc` pour vérifier les types dans les fichiers `.vue`
-
-## Exercices pratiques
-
-Ces exercices vous permettent de pratiquer les concepts vus plus haut. Essayez de résoudre chaque exercice **avant** de regarder la solution.
+# Exercices TypeScript
 
 > 💡 **Conseil** : Copiez le code dans un fichier `.ts` et lancez `npx tsc --noEmit` pour voir les erreurs de type. Ou utilisez le [TypeScript Playground](https://www.typescriptlang.org/play/) en ligne.
 
 ---
 
-### Exercice 1 — Typage de base
+## Exercice 1 — Typage de base
 
 Déclarez les variables suivantes avec les types TypeScript appropriés :
 
@@ -206,7 +34,7 @@ let adresse: { rue: string; ville: string } | null = null;
 
 ---
 
-### Exercice 2 — Interface et optionnel
+## Exercice 2 — Interface et optionnel
 
 Créez une interface `Facture` avec les champs suivants :
 
@@ -248,7 +76,7 @@ const maFacture: Facture = {
 
 ---
 
-### Exercice 3 — Type union (énumération)
+## Exercice 3 — Type union (énumération)
 
 Dans ce projet, un utilisateur peut avoir le rôle `"ADMIN"`, `"EDITOR"` ou `"VIEWER"`. Créez un type `Role` qui ne permet **que** ces trois valeurs.
 
@@ -279,7 +107,7 @@ peutModifier("HACKER");  // ❌ Erreur de compilation !
 
 ---
 
-### Exercice 4 — Interface avec héritage
+## Exercice 4 — Interface avec héritage
 
 Créez une interface `EntityMetadata` contenant `id: number`, `createdAt: string` et `updatedAt: string`.
 
@@ -318,7 +146,7 @@ const p: Prestation = {
 
 ---
 
-### Exercice 5 — Génériques
+## Exercice 5 — Génériques
 
 Créez une interface générique `ApiResponse<T>` avec deux propriétés :
 
@@ -366,7 +194,7 @@ const reponse2: ApiResponse<string> = {
 
 ---
 
-### Exercice 6 — `unknown` vs `any` (bonus)
+## Exercice 6 — `unknown` vs `any` (bonus)
 
 On reçoit des données JSON brutes. Déclarez une variable `raw` de type `unknown`, puis écrivez une fonction `extraireNom(raw: unknown)` qui retourne le `nom` si `raw` est un objet avec une propriété `nom` de type `string`, sinon retourne `"Inconnu"`.
 
@@ -402,9 +230,9 @@ extraireNom("bonjour");          // "Inconnu"
 
 ---
 
-### Exercice 7 — Quiz : `this` en action
+## Exercice 7 — Quiz : `this` en action
 
-#### Question 1
+### Question 1
 
 Qu'affiche ce code ?
 
@@ -436,7 +264,7 @@ salut(); // Qu'affiche cette ligne ?
 
 ---
 
-#### Question 2
+### Question 2
 
 Même question, mais cette fois avec une arrow function pour `direBonjour` :
 
@@ -469,10 +297,23 @@ salut(); // Qu'affiche cette ligne ?
 
 ---
 
+## Résumé des exercices
+
+| Exercice | Concept |
+|----------|---------|
+| 1 | Types primitifs, tableaux, unions |
+| 2 | Interfaces, champs optionnels |
+| 3 | Type union littéral (équivalent énumération) |
+| 4 | Héritage d'interfaces |
+| 5 | Génériques |
+| 6 | `unknown` vs `any` |
+| 7 | Quiz sur `this` avec fonctions classiques et arrow functions |
+
+---
+
 ## Ressources pour aller plus loin
 
 - [Documentation officielle TypeScript](https://www.typescriptlang.org/docs/)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 - [TypeScript Playground](https://www.typescriptlang.org/play/) — tester du code TypeScript en ligne
 - [Total TypeScript — Beginner's Guide](https://www.totaltypescript.com/tutorials/beginner-tutorial)
-- [Grafikart — TypeScript (YouTube)](https://www.youtube.com/watch?v=ffCIANfx_-0&list=PLjwdMgw5TTLX1tQ1qDNHTsy_lrkCt4VW3)

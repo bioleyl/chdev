@@ -121,7 +121,7 @@ Une **extension** est un module **code** (TypeScript, JavaScript, etc.) qui ajou
 
 ### Exemple d'extension simple
 
-Les extensions suivent un pattern similaire selon l'agent utilisé :
+Voici un exemple concret d'extension pour **pi**, l'agent utilisé dans ce projet :
 
 ```typescript
 // Exemple générique d'extension
@@ -305,6 +305,5 @@ L'agent reçoit le prompt rempli : *"Explique ce concept JavaScript en utilisant
 
 ## Ressources pour aller plus loin
 
-- [Spécification Agent Skills](https://agentskills.io/)
 - [Anthropic - Agent Skills documentation](https://docs.anthropic.com/en/docs/build-with-claude/agent-skills-overview)
-- [GitHub - Exemples d'extensions d'agents](https://github.com/topics/coding-agent-extension)
+- [pi - Agent extensions (exemple open-source)](https://github.com/earendil-works/pi-coding-agent/tree/main/extensions)

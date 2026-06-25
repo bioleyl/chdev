@@ -9,7 +9,7 @@
 - **Travailler en équipe** sans écraser le travail des autres
 - **Créer des branches** pour développer des fonctionnalités en parallèle
 
-> **Analogie WinDev** : Git ≈ l'historique des versions de vos projets WinDev, mais bien plus puissant. Au lieu d'avoir `Projet_v1.hdp`, `Projet_v2.hdp`, `Projet_v2_bis.hdp`, Git garde une trace précise de chaque modification de chaque fichier, et vous permet de revenir à n'importe quel moment.
+> **Analogie WinDev** : Git ≈ la fonction **GDS (Gestionnaire de Sources)** de WinDev qui sauvegarde des copies de votre projet et historise vos modifications de code. Au lieu d'avoir `Projet_v1.hdp`, `Projet_v2.hdp`, `Projet_v2_bis.hdp`, Git garde une trace précise de chaque modification de chaque fichier, et vous permet de revenir à n'importe quel moment.
 
 ### Pourquoi Git est essentiel ?
 
@@ -84,7 +84,7 @@ git config --global user.email "votre.email@example.com"
 Pour récupérer le projet CHDev depuis un dépôt distant (GitHub, GitLab, etc.) :
 
 ```bash
-git clone https://github.com/votre-org/chdev.git
+git clone https://github.com/bioleyl/chdev.git
 cd chdev
 npm install
 ```

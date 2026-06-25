@@ -28,7 +28,7 @@ En WinDev, vous avez l'habitude d'avoir une application avec ses fichiers, ses c
 | Avantage | Explication |
 |----------|-------------|
 | **Schémas partagés** | Les règles de validation (Zod) sont dans `common/` et utilisées par le backend ET le frontend |
-| **Une seule version** | Plus de risque que le frontend et le backend aient des versions différentes d'un même type |
+| **Une seule version** | Le risque que le frontend et le backend aient des versions différentes d'un même type est éliminé. |
 | **Un seul `git clone`** | Tout est accessible immédiatement |
 
 ### npm workspaces

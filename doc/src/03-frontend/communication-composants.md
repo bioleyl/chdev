@@ -1106,5 +1106,6 @@ const afficherResume = (data: { nom: string; email: string }) => {
 - [Vue 3 Documentation — Events](https://fr.vuejs.org/guide/components/events)
 - [Vue 3 Documentation — v-model](https://fr.vuejs.org/guide/components/v-model)
 - [Vue 3 Documentation — defineModel](https://fr.vuejs.org/api/sfc-script-setup.html#defineprops-defineemits)
+- [Grafikart — Vue.js 3 (YouTube)](https://www.youtube.com/watch?v=DpVdkIz_fQo&list=PLjwdMgw5TTLVQgowwmhNCpXfHMfM9Jove)
 - [Vue 3 Documentation — Composition API avec `<script setup>`](https://fr.vuejs.org/api/sfc-script-setup.html)
 - [Composition API Handbook (anglais)](https://vuejs.org/guide/extras/composition-api-faq.html)

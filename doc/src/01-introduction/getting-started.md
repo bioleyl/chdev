@@ -15,7 +15,32 @@ Avant de commencer, assurez-vous d'avoir :
 | **npm** | 10+ (fourni avec Node.js) | Pour installer les dépendances |
 | **Un navigateur web** | Chrome, Firefox, Edge | Pour voir l'interface |
 
-> **Analogie WinDev** : Git ≈ la fonction "Version" de WinDev qui sauvegarde des copies de votre projet. Node.js ≈ l'exécutable WinDev qui fait tourner votre programme. npm ≈ le gestionnaire de bibliothèques WinDev.
+## Prérequis avant la formation
+
+Avant de commencer la formation, assurez-vous d'avoir préparé votre environnement :
+
+| Action | Comment |
+|--------|--------|
+| **Créer un compte GitHub** | [Inscrivez-vous gratuitement](https://github.com/signup) |
+| **Installer Git** | [git-scm.com](https://git-scm.com/) — vérifiez avec `git --version` |
+| **Installer npm** | Inclus avec Node.js — vérifiez avec `node --version` (20+) et `npm --version` (10+) |
+| **Installer VS Code** | [code.visualstudio.com](https://code.visualstudio.com/) |
+| **Installer les extensions VS Code** | Biome (`biomejs.biome`), Vue - Official (`Vue.volar`), GitLens (`eamodio.gitlens`) — voir la page [VS Code](./vscode.md) |
+
+---
+
+## Prérequis
+
+Avant de commencer, assurez-vous d'avoir :
+
+| Logiciel | Version minimum | Pourquoi ? |
+|----------|----------------|------------|
+| **Git** | Dernière version | Pour cloner le projet |
+| **Node.js** | 20+ | L'environnement d'exécution JavaScript |
+| **npm** | 10+ (fourni avec Node.js) | Pour installer les dépendances |
+| **Un navigateur web** | Chrome, Firefox, Edge | Pour voir l'interface |
+
+> **Analogie WinDev** : Git ≈ la fonction GDS (Gestionnaire de Sources) de WinDev qui sauvegarde des copies de votre projet et historise vos modifications de code. Node.js ≈ l'exécutable WinDev qui fait tourner votre programme. npm ≈ le gestionnaire de bibliothèques WinDev.
 
 ---
 
@@ -24,7 +49,7 @@ Avant de commencer, assurez-vous d'avoir :
 Ouvrez un terminal et exécutez :
 
 ```bash
-git clone https://github.com/votre-organisation/chdev.git
+git clone https://github.com/bioleyl/chdev.git
 cd chdev
 ```
 
@@ -50,15 +75,17 @@ Le processus peut prendre quelques minutes. Une fois terminé, vous verrez un me
 
 Le fichier `.env` contient les **variables d'environnement** du backend : les informations de configuration qui ne doivent jamais être partagées (clés secrètes, mots de passe, paramètres de base de données). C'est le moyen que le backend utilise pour se configurer sans avoir de valeurs en dur dans le code.
 
-> **Analogie WinDev** : `.env` ≈ le fichier de configuration `wdinfo` ou les variables globales de votre projet. C'est là que vous stockez les paramètres spécifiques à votre machine (chemins, mots de passe, ports) sans les mettre directement dans vos programmes.
+> **Analogie WinDev** : `.env` ≈ le fichier de configuration `*.ini` où sont enregistrés les paramètres globaux de votre projet. C'est là que vous stockez les paramètres spécifiques à votre machine (chemins, mots de passe, ports) sans les mettre directement dans vos programmes.
 
 ### Comment créer le fichier `.env`
 
-Le projet fournit un fichier modèle nommé `.env.example`. Pour créer votre fichier de configuration, exécutez :
+Le projet fournit un fichier modèle nommé `.env.example`. Pour créer votre fichier de configuration, exécutez (en **PowerShell**) :
 
 ```bash
 cp backend/.env.example backend/.env
 ```
+
+> **Note** : Cette commande fonctionne en **PowerShell**. Si vous utilisez **CMD**, utilisez à la place : `copy backend\.env.example backend\.env`.
 
 > **Note** : Le fichier `.env` est **exclu du suivi Git** (il est dans `.gitignore`). C'est une règle de sécurité : les clés secrètes ne doivent jamais être commitées dans le dépôt. Chaque développeur a son propre fichier `.env` avec ses propres valeurs.
 

@@ -636,4 +636,7 @@ Créez un formulaire en 2 colonnes où certains champs prennent toute la largeur
 - [CSS-Tricks — A Complete Guide to Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
 - [Flexbox Froggy — Jeu pour apprendre Flexbox](https://flexboxfroggy.com/)
 - [Grid Garden — Jeu pour apprendre Grid](https://cssgridgarden.com/)
-- [MDN — CSS Layout](https://developer.mozilla.org/fr/docs/Web/CSS/CSS_layout)
+- [MDN — Guide de mise en page CSS](https://developer.mozilla.org/fr/docs/Web/CSS/CSS_layout)
+- [Grafikart — CSS (YouTube)](https://www.youtube.com/watch?v=7Te4N3R0BC0&list=PLjwdMgw5TTLXm09oSn-bmq08Yho7QS9fD)
+- [Grafikart — Vue.js 3 (YouTube)](https://www.youtube.com/watch?v=DpVdkIz_fQo&list=PLjwdMgw5TTLVQgowwmhNCpXfHMfM9Jove)
+- [Grafikart — JavaScript (YouTube)](https://www.youtube.com/watch?v=asToYAq0F-I&list=PLjwdMgw5TTLXgsTQE_1PpRkC_yX47ZcGV)
