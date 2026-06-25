@@ -1,11 +1,17 @@
 import { defineConfig } from 'vitepress';
-
 export default defineConfig({
   base: '/chdev/',
   ignoreDeadLinks: true,
   title: 'CHDev — Documentation',
   description: 'Documentation et guide de formation pour le projet CHDev',
   lastUpdated: true,
+  head: [
+    [
+      'style',
+      {},
+      `:root{--vp-c-brand-1:#ef4444;--vp-c-brand-2:#dc2626;--vp-c-brand-3:#b91c1c;--vp-c-brand-soft:rgba(239,68,68,.16)}`,
+    ],
+  ],
   vite: {
     server: {
       port: 2500,
