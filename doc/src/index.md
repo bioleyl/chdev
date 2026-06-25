@@ -25,4 +25,7 @@ hero:
     - theme: alt
       text: Electron — Application de bureau
       link: /05-electron/
+    - theme: alt
+      text: Exercices
+      link: /07-exercices/
 ---

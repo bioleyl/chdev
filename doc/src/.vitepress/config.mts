@@ -72,6 +72,16 @@ export default defineConfig({
           { text: 'Builder et packaging', link: '/05-electron/packaging' },
         ],
       },
+      {
+        text: 'Exercices',
+        collapsed: false,
+        items: [
+          { text: 'Vue d\'ensemble', link: '/07-exercices/' },
+          { text: 'Communication entre composants', link: '/07-exercices/communication-composants' },
+          { text: 'TypeScript', link: '/07-exercices/typescript' },
+          { text: 'Vue.js de base', link: '/07-exercices/vue-basiques' },
+        ],
+      },
     ],
   },
 });
