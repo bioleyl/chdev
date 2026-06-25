@@ -10,7 +10,7 @@ export default defineConfig({
   reporter: 'html',
   globalSetup: './tests/global.setup.ts',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:5173',
     actionTimeout: 10000,
   },
   projects: [

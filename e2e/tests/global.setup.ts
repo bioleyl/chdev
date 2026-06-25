@@ -24,7 +24,7 @@ export default async function main(): Promise<void> {
       throw new Error(`Login failed with status ${response.status()}: ${await response.text()}`);
     }
 
-    const body = await response.json() as { token: string; user: { id: number; email: string; role: string } };
+    const body = (await response.json()) as { token: string; user: { id: number; email: string; role: string } };
 
     // Ensure auth directory exists
     if (!fs.existsSync(AUTH_DIR)) {

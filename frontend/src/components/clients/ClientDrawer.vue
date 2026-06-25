@@ -1,5 +1,6 @@
 <template>
   <GenericDrawer
+    data-testid="clients-drawer-component"
     title="Détails du client"
     v-model="internalDrawer"
     :details="details"
@@ -7,6 +8,7 @@
     <template v-slot:actions>
       <v-btn
         color="primary"
+        data-testid="clients-drawer-create-invoice-button"
         prepend-icon="mdi-file-document-plus"
         variant="tonal"
         v-if="props.client"

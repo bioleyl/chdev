@@ -65,6 +65,7 @@
     v-if="tab === 'header'"
   >
     <v-btn
+      data-testid="invoices-modal-cancel-button"
       variant="text"
       v-if="props.editing"
       :disabled="isLoading"
@@ -75,6 +76,7 @@
 
     <v-btn
       color="primary"
+      data-testid="invoices-modal-save-button"
       :disabled="!isDirty || isLoading"
       @click="onSubmit"
     >

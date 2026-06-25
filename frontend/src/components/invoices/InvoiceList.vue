@@ -153,8 +153,10 @@
 
 <template>
   <PaginatedTable
+    data-testid="invoices-list-component"
     v-model:options="tableOptions"
     v-model:row-selected="selectedInvoice"
+    :dataTestIdPrefix="'invoices'"
     :headers="headers"
     :height="props.height"
     :is-loading="isLoading"
@@ -169,6 +171,7 @@
       v-slot:actions="{ item }"
     >
       <v-btn
+        data-testid="invoices-print-button"
         icon
         size="small"
         variant="text"

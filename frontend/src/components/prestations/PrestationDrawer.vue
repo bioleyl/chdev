@@ -1,5 +1,6 @@
 <template>
   <GenericDrawer
+    data-testid="prestations-drawer-component"
     title="Détails de la prestation"
     v-model="internalDrawer"
     :details="details"

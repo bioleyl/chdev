@@ -25,6 +25,7 @@
         />
         <v-alert
           class="mt-4"
+          data-testid="login-error-message"
           type="error"
           v-if="login.error.value"
         >

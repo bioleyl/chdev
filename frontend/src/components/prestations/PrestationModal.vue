@@ -1,5 +1,6 @@
 <template>
   <v-dialog
+    data-testid="prestations-modal-component"
     max-width="600"
     persistent
     v-model="internalDialog"

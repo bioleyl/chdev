@@ -1,5 +1,8 @@
 <template>
-  <v-container fluid>
+  <v-container
+    data-testid="invoices-page-container"
+    fluid
+  >
     <v-row class="align-center">
       <v-col>
         <h1 class="text-h4">Factures</h1>
@@ -7,6 +10,7 @@
       <v-col>
         <v-text-field
           clearable
+          data-testid="invoices-search-field"
           hide-details
           placeholder="Rechercher..."
           prepend-inner-icon="mdi-magnify"
@@ -17,6 +21,7 @@
       <v-col class="text-right">
         <v-btn
           color="primary"
+          data-testid="invoices-create-button"
           @click="startCreate"
         >
           Créer une facture

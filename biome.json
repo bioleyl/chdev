@@ -44,7 +44,9 @@
       "!**/dist",
       "!**/build",
       "!**/coverage",
-      "!**/cache"
+      "!**/cache",
+      "!**/playwright-report",
+      "!**/test-results"
     ]
   },
   "formatter": {

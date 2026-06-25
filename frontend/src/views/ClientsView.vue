@@ -1,5 +1,8 @@
 <template>
-  <v-container fluid>
+  <v-container
+    data-testid="clients-page-container"
+    fluid
+  >
     <v-row class="align-center">
       <v-col>
         <h1 class="text-h4">Clients</h1>
@@ -7,6 +10,7 @@
       <v-col>
         <v-text-field
           clearable
+          data-testid="clients-search-field"
           hide-details
           placeholder="Rechercher..."
           prepend-inner-icon="mdi-magnify"
@@ -17,6 +21,7 @@
       <v-col class="text-right">
         <v-btn
           color="primary"
+          data-testid="clients-create-button"
           @click="startCreate"
         >
           Créer un client

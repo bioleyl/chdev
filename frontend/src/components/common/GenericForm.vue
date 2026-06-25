@@ -16,11 +16,15 @@
       actionName?: string;
       showCancelButton?: boolean;
       editing?: boolean;
+      saveButtonTestId?: string;
+      cancelButtonTestId?: string;
     }>(),
     {
       showCancelButton: true,
       actionName: 'Enregistrer',
       editing: false,
+      saveButtonTestId: 'generic-form-save-button',
+      cancelButtonTestId: 'generic-form-cancel-button',
     }
   );
 
@@ -83,6 +87,7 @@
       <v-btn
         variant="text"
         v-if="props.showCancelButton"
+        :data-testid="props.cancelButtonTestId"
         :disabled="isLoading"
         @click="cancel"
       >
@@ -91,6 +96,7 @@
 
       <v-btn
         color="primary"
+        :data-testid="props.saveButtonTestId"
         :disabled="!isDirty || isDisabled"
         @click="save"
       >

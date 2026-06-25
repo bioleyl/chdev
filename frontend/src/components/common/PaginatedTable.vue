@@ -22,6 +22,8 @@
       expanded?: Array<string | number>;
       itemValue?: string;
       height?: number;
+      dataTestIdPrefix?: string;
+      dataTestId?: string;
     }>(),
     {
       height: 900,
@@ -30,6 +32,8 @@
       rowSelected: null,
       expanded: () => [],
       itemValue: 'id',
+      dataTestIdPrefix: '',
+      dataTestId: '',
     }
   );
 
@@ -142,6 +146,7 @@
 <template>
   <v-data-table-server
     fixed-header
+    :data-testid="props.dataTestId"
     :expanded="typedExpanded"
     :headers="columns"
     :height="props.height"
@@ -179,6 +184,7 @@
           icon
           size="small"
           variant="text"
+          :data-testid="props.dataTestIdPrefix ? `${props.dataTestIdPrefix}-edit-button` : 'edit-button'"
           @click.stop="emit('edit', item)"
         >
           <v-icon>mdi-pencil</v-icon>
@@ -188,6 +194,7 @@
           icon
           size="small"
           variant="text"
+          :data-testid="props.dataTestIdPrefix ? `${props.dataTestIdPrefix}-delete-button` : 'delete-button'"
           @click.stop="onDelete(item)"
         >
           <v-icon>mdi-delete</v-icon>

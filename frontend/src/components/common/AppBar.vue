@@ -58,18 +58,21 @@
     </v-app-bar-title>
     <v-spacer />
     <v-btn
+      data-testid="app-nav-invoices"
       to="/invoices"
       variant="text"
       v-if="auth.hasPermission('VIEWER')"
       >Invoices</v-btn
     >
     <v-btn
+      data-testid="app-nav-prestations"
       to="/prestations"
       variant="text"
       v-if="auth.hasPermission('VIEWER')"
       >Prestations</v-btn
     >
     <v-btn
+      data-testid="app-nav-clients"
       to="/clients"
       variant="text"
       v-if="auth.hasPermission('VIEWER')"
@@ -90,6 +93,7 @@
       </v-chip>
       <span class="text-body-2 mx-2">{{ auth.user?.email }}</span>
       <v-btn
+        data-testid="app-nav-logout"
         size="small"
         variant="text"
         @click="logout"

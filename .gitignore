@@ -7,3 +7,5 @@ cache/
 package-lock.json
 system-prompt-*
 test-results/
+playwright-report/
+.auth/

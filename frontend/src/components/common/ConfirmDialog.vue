@@ -27,12 +27,14 @@
     >
       <template v-slot:actions>
         <v-btn
+          data-testid="confirm-dialog-cancel-button"
           text
           @click="emit('no')"
           >Non</v-btn
         >
         <v-btn
           color="primary"
+          data-testid="confirm-dialog-confirm-button"
           @click="emit('yes')"
           >Oui</v-btn
         >

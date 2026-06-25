@@ -1,6 +1,7 @@
 <template>
   <v-navigation-drawer
     v-model="internalModel"
+    :data-testid="props.dataTestId"
     :location="location"
     :width="width"
   >
@@ -75,6 +76,7 @@
       details?: Array<DrawerDetailItem>;
       width?: number | string;
       location?: 'left' | 'right' | 'top' | 'bottom';
+      dataTestId?: string;
     }>(),
     {
       details: () => [],

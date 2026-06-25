@@ -1,12 +1,27 @@
 <template>
-  <v-container fluid>
+  <v-container
+    data-testid="prestations-page-container"
+    fluid
+  >
     <v-row class="align-center">
       <v-col>
         <h1 class="text-h4">Prestations</h1>
       </v-col>
+      <v-col>
+        <v-text-field
+          clearable
+          data-testid="prestations-search-field"
+          hide-details
+          placeholder="Rechercher..."
+          prepend-inner-icon="mdi-magnify"
+          variant="outlined"
+          v-model="search"
+        />
+      </v-col>
       <v-col class="text-right">
         <v-btn
           color="primary"
+          data-testid="prestations-create-button"
           @click="startCreate"
         >
           Créer une prestation
@@ -57,6 +72,7 @@
   const { isLoading, withLoading } = useLoading();
   const prestations = ref<Array<Prestation>>([]);
   const rowSelected = ref<Prestation | null>(null);
+  const search = ref<string>('');
   const selectedPrestation = ref<Prestation | null>(null);
   const itemsLength = ref<number>(0);
   const drawer = ref<boolean>(false);
@@ -74,6 +90,10 @@
 
   watch(options, (newOptions) => {
     fetchPrestations(newOptions);
+  });
+
+  watch(search, (newSearch) => {
+    options.value = { ...options.value, search: newSearch || '' };
   });
 
   watch(rowSelected, (newValue) => {

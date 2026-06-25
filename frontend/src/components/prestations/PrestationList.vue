@@ -37,8 +37,10 @@
 
 <template>
   <PaginatedTable
+    data-testid="prestations-list-component"
     v-model:options="options"
     v-model:row-selected="rowSelected"
+    :dataTestIdPrefix="'prestations'"
     :headers="headers"
     :is-loading="isLoading"
     :items="items"

@@ -89,9 +89,11 @@
 
 <template>
   <PaginatedTable
+    data-testid="clients-list-component"
     v-model:options="options"
     v-model:row-selected="selectedClient"
     v-model:expanded="expandedClientIds"
+    :dataTestIdPrefix="'clients'"
     :headers="headers"
     :is-loading="isLoading"
     :items="items"

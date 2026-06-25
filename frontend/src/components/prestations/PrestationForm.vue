@@ -10,6 +10,7 @@
       <v-row>
         <v-col cols="12">
           <v-text-field
+            data-testid="prestations-form-label"
             label="Name"
             v-model="form.label"
             :disabled="disabled"
@@ -19,6 +20,7 @@
         </v-col>
         <v-col cols="12">
           <v-textarea
+            data-testid="prestations-form-description"
             label="Description"
             v-model="form.description"
             :disabled="disabled"
@@ -31,6 +33,7 @@
           md="6"
         >
           <v-number-input
+            data-testid="prestations-form-unit-price"
             label="Unit Price"
             v-model="form.unitPrice"
             :disabled="disabled"
@@ -43,6 +46,7 @@
           md="6"
         >
           <v-text-field
+            data-testid="prestations-form-unit"
             label="Unit"
             v-model="form.unit"
             :disabled="disabled"

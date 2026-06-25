@@ -1,5 +1,6 @@
 <template>
   <v-dialog
+    data-testid="invoices-modal-component"
     max-width="800"
     persistent
     v-model="internalDialog"
