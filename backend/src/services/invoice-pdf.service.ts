@@ -1,3 +1,4 @@
+// biome-ignore-all lint/suspicious/noExplicitAny: PDFKit Document type is complex and not fully typed
 import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';

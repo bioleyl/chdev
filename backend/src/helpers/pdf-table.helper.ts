@@ -1,3 +1,4 @@
+// biome-ignore-all lint/suspicious/noExplicitAny: PDFKit Document type is complex and not fully typed
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */

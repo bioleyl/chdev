@@ -40,7 +40,7 @@
     data-testid="prestations-list-component"
     v-model:options="options"
     v-model:row-selected="rowSelected"
-    :dataTestIdPrefix="'prestations'"
+    :data-test-id-prefix="'prestations'"
     :headers="headers"
     :is-loading="isLoading"
     :items="items"

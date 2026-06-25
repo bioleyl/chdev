@@ -156,7 +156,7 @@
     data-testid="invoices-list-component"
     v-model:options="tableOptions"
     v-model:row-selected="selectedInvoice"
-    :dataTestIdPrefix="'invoices'"
+    :data-test-id-prefix="'invoices'"
     :headers="headers"
     :height="props.height"
     :is-loading="isLoading"

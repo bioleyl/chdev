@@ -93,7 +93,7 @@
     v-model:options="options"
     v-model:row-selected="selectedClient"
     v-model:expanded="expandedClientIds"
-    :dataTestIdPrefix="'clients'"
+    :data-test-id-prefix="'clients'"
     :headers="headers"
     :is-loading="isLoading"
     :items="items"

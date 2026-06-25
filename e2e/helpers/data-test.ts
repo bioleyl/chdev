@@ -68,19 +68,6 @@ interface TestLocator {
 
 // ──── Playwright adapter (default) ───────────────────────────────────────────
 
-class PlaywrightAdapter implements TestAdapter {
-  // Exposed for test files that want to import Playwright directly
-  private _loc: import('@playwright/test').Locator;
-
-  constructor(loc: import('@playwright/test').Locator) {
-    this._loc = loc;
-  }
-
-  getByTestId(testId: string): PlaywrightLocator {
-    return new PlaywrightLocator(this._loc.locator(`[data-testid="${testId}"]`));
-  }
-}
-
 class PlaywrightLocator implements TestLocator {
   constructor(private _loc: ReturnType<import('@playwright/test').Page['locator']>) {}
 
@@ -162,7 +149,7 @@ class PlaywrightLocator implements TestLocator {
   }
 
   async selectOption(value: string | { value?: string; label?: string; index?: number } | null): Promise<void> {
-    return (this._loc.selectOption as any)(value);
+    return this._loc.selectOption(value);
   }
 
   async textContent(): Promise<string | null> {

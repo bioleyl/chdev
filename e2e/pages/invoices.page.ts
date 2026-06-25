@@ -9,10 +9,7 @@ export class InvoicesPage extends BasePageObject {
   private readonly _container = 'invoices-page-container';
   private readonly _searchField = 'invoices-search-field';
   private readonly _createButton = 'invoices-create-button';
-  private readonly _invoiceList = 'invoices-list-component';
-  private readonly _invoiceModal = 'invoices-modal-component';
   private readonly _modalCancelButton = 'invoices-modal-cancel-button';
-  private readonly _modalSaveButton = 'invoices-modal-save-button';
   private readonly _editButton = 'invoices-edit-button';
   private readonly _deleteButton = 'invoices-delete-button';
   private readonly _printButton = 'invoices-print-button';

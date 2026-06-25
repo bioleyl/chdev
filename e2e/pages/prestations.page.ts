@@ -23,7 +23,6 @@ export class PrestationsPage extends BasePageObject {
   private readonly _deleteButton = 'prestations-delete-button';
   private readonly _confirmConfirm = 'confirm-dialog-confirm-button';
   private readonly _confirmCancel = 'confirm-dialog-cancel-button';
-  private readonly _unsavedConfirm = 'Changements non sauvegardés';
 
   // ──── User actions ─────────────────────────────────────────────────────────
 
