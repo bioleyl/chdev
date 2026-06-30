@@ -30,6 +30,7 @@ export default defineConfig({
           { text: 'Git — Contrôle de version', link: '/01-introduction/git' },
           { text: 'Node.js et npm', link: '/01-introduction/node-js' },
           { text: 'TypeScript', link: '/01-introduction/typescript' },
+          { text: 'TypeScript avancé', link: '/01-introduction/typescript-utility'},
           { text: 'Linting et Formatting', link: '/01-introduction/linting-formatting' },
           { text: 'Zod — Validation de schémas', link: '/01-introduction/zod' },
         ],
