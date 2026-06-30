@@ -4,7 +4,7 @@
 
 **TypeScript** est une extension de JavaScript qui ajoute un **système de types statiques**. Le code TypeScript est compilé (transpilé) en JavaScript avant d'être exécuté.
 
-> **Analogie WinDev** : TypeScript ≈ WinDev lui-même. WinDev est un langage typé (vous déclarez `i est un entier`, `sChaine est une chaîne`). JavaScript pur, c'est comme du code sans déclaration de type — TypeScript rajoute cette rigueur.
+> **Analogie WinDev** : TypeScript ≈ WinDev lui-même. WinDev est un langage typé (vous déclarez `i est un entier`, `Chaine est une chaîne`). JavaScript pur, c'est comme du code sans déclaration de type — TypeScript rajoute cette rigueur.
 
 ### Pourquoi TypeScript ?
 
@@ -77,7 +77,7 @@ function additionner(a: number, b: number): number {
 }
 ```
 
-### Syntaxe arrow function
+### Syntaxe `arrow function` ou *fonctions fléchées*
 
 ```typescript
 const additionner = (a: number, b: number): number => {
@@ -102,7 +102,7 @@ Dans ce projet, les **arrow functions** sont privilégiées pour les fonctions s
 class Compteur {
   private valeur: number = 0;
 
-  // ✅ Fonction classique : `this` est lié à l'appel
+  // Fonction classique : `this` est lié à l'appel
   incrementer(): void {
     this.valeur++;
     // Dans un callback, `this` est perdu sans arrow function
@@ -111,7 +111,7 @@ class Compteur {
     }, 100);
   }
 
-  // ✅ Arrow function : `this` est hérité du contexte
+  // Arrow function : `this` est hérité du contexte
   incrementer2(): void {
     this.valeur++;
     setTimeout(() => {
