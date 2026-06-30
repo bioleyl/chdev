@@ -9,9 +9,9 @@ Ce guide vous accompagne pas à pas pour lancer l'application CHDev en local, su
 Avant de commencer, assurez-vous d'avoir :
 
 | Logiciel | Version minimum | Pourquoi ? |
-|----------|----------------|------------|
+| ---------- | ---------------- | ------------ |
 | **Git** | Dernière version | Pour cloner le projet |
-| **Node.js** | 20+ | L'environnement d'exécution JavaScript |
+| **Node.js** | 24 | L'environnement d'exécution JavaScript |
 | **npm** | 10+ (fourni avec Node.js) | Pour installer les dépendances |
 | **Un navigateur web** | Chrome, Firefox, Edge | Pour voir l'interface |
 
@@ -20,25 +20,14 @@ Avant de commencer, assurez-vous d'avoir :
 Avant de commencer la formation, assurez-vous d'avoir préparé votre environnement :
 
 | Action | Comment |
-|--------|--------|
+| -------- | -------- |
 | **Créer un compte GitHub** | [Inscrivez-vous gratuitement](https://github.com/signup) |
 | **Installer Git** | [git-scm.com](https://git-scm.com/) — vérifiez avec `git --version` |
-| **Installer npm** | Inclus avec Node.js — vérifiez avec `node --version` (20+) et `npm --version` (10+) |
+| **Installer npm** | Inclus avec Node.js — vérifiez avec `node --version` (24+) et `npm --version` (10+) |
 | **Installer VS Code** | [code.visualstudio.com](https://code.visualstudio.com/) |
 | **Installer les extensions VS Code** | Biome (`biomejs.biome`), Vue - Official (`Vue.volar`), GitLens (`eamodio.gitlens`) — voir la page [VS Code](./vscode.md) |
 
 ---
-
-## Prérequis
-
-Avant de commencer, assurez-vous d'avoir :
-
-| Logiciel | Version minimum | Pourquoi ? |
-|----------|----------------|------------|
-| **Git** | Dernière version | Pour cloner le projet |
-| **Node.js** | 20+ | L'environnement d'exécution JavaScript |
-| **npm** | 10+ (fourni avec Node.js) | Pour installer les dépendances |
-| **Un navigateur web** | Chrome, Firefox, Edge | Pour voir l'interface |
 
 > **Analogie WinDev** : Git ≈ la fonction GDS (Gestionnaire de Sources) de WinDev qui sauvegarde des copies de votre projet et historise vos modifications de code. Node.js ≈ l'exécutable WinDev qui fait tourner votre programme. npm ≈ le gestionnaire de bibliothèques WinDev.
 
@@ -94,12 +83,12 @@ cp backend/.env.example backend/.env
 Voici ce que contient votre fichier `.env` :
 
 | Variable | Valeur par défaut | Rôle |
-|----------|-------------------|------|
+| ---------- | ------------------- | ------ |
 | `PORT` | `3000` | Port sur lequel le serveur API écoute |
 | `NODE_ENV` | `development` | Mode de l'application (`development`, `production`, `test`) |
+| `DB_PATH` | *(non défini, utilise le défaut)* | Chemin personnalisé vers le fichier SQLite (optionnel) |
 | `JWT_SECRET` | `dev-secret-change-in-production` | Clé secrète pour signer les jetons d'authentification |
 | `JWT_EXPIRY` | `1h` | Durée de validité des jetons (1 heure) |
-| `DB_PATH` | *(non défini, utilise le défaut)* | Chemin personnalisé vers le fichier SQLite (optionnel) |
 
 > ⚠️ **Important** : La variable `JWT_SECRET` doit être changée avant de déployer en production. Pour le développement local, la valeur par défaut est suffisante.
 
@@ -117,7 +106,7 @@ npm --workspace backend run db:migrate
 
 Vous devriez voir un message de succès :
 
-```
+```bash
 Running migrations...
 Migrations completed successfully.
 ```
@@ -137,7 +126,7 @@ npm --workspace backend run db:seed
 Cela crée :
 
 | Entité | Quantité | Description |
-|--------|----------|-------------|
+| -------- | ---------- | ------------- |
 | **Utilisateurs** | 3 | Un par rôle (ADMIN, EDITOR, VIEWER) |
 | **Prestations** | Variées | Services facturables |
 | **Clients** | Variés | Clients de démonstration |
@@ -171,10 +160,10 @@ npm run dev
 
 Cela démarre :
 
-| Service | Port | Description |
-|---------|------|-------------|
+| Service           | Port                    | Description              |
+|---------          |------                   |-------------             |
 | **Backend (API)** | `http://localhost:3000` | Serveur Express + SQLite |
-| **Frontend (Web)** | `http://localhost:5173` | Interface Vue 3 + Vuetify |
+| **Frontend (Web)**| `http://localhost:5173` | Interface Vue 3 + Vuetify|
 
 ### Ouvrir l'interface
 
@@ -242,21 +231,29 @@ Une fois l'application lancée et connectée, voici votre parcours recommandé :
 | Le backend ne démarre pas (erreur `PORT` ou `JWT_SECRET`) | Vérifiez que `backend/.env` existe : `cp backend/.env.example backend/.env` |
 | Base de données vide après le redémarrage | Relancez `npm --workspace backend run db:seed` |
 | Le frontend ne se connecte pas au backend | Vérifiez que le backend est bien démarré sur le port 3000 |
-| Erreurs TypeScript au démarrage | Assurez-vous d'avoir Node.js 20+ : `node --version` |
+| Erreurs TypeScript au démarrage | Assurez-vous d'avoir Node.js 24 : `node --version` |
 
 ---
 
 ## Checklist récapitulative
 
-- [ ] Projet cloné avec `git clone`
-- [ ] Dépendances installées avec `npm install`
-- [ ] Fichier `.env` configuré (copié depuis `.env.example`)
-- [ ] Migrations exécutées avec `npm --workspace backend run db:migrate`
-- [ ] Base de données remplie avec `npm --workspace backend run db:seed`
-- [ ] Artefacts partagés construits avec `npm run build -w common`
-- [ ] Application lancée avec `npm run dev`
-- [ ] Interface ouverte sur `http://localhost:5173`
-- [ ] Connexion réussie avec un compte de démonstration
+  ☐ Projet cloné avec `git clone`
+
+  ☐ Dépendances installées avec `npm install`
+
+  ☐ Fichier `.env` configuré (copié depuis `.env.example`)
+
+  ☐ Migrations exécutées avec `npm --workspace backend run db:migrate`
+
+  ☐ Base de données remplie avec `npm --workspace backend run db:seed`
+
+  ☐ Artefacts partagés construits avec `npm run build -w common`
+
+  ☐ Application lancée avec `npm run dev`
+
+  ☐ Interface ouverte sur `http://localhost:5173`
+
+  ☐ Connexion réussie avec un compte de démonstration
 
 ---
 
